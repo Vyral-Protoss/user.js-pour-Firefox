@@ -49,6 +49,8 @@ user_pref("browser.send_pings", false);
 user_pref("dom.gamepad.enabled", false);
 //Outil de réalité virtuelle
 user_pref("dom.vr.enabled", false);
+//Démarrer automatiquement le navigateur en mode navigation privée
+user_pref("browser.privatebrowsing.autostart", false);
 //Content Security Policy
 user_pref("security.csp.enable", true);
 //Désactiver authentification non sécurisée
@@ -193,7 +195,21 @@ user_pref("browser.cache.offline.enable", false);
 user_pref("places.history.enabled", false);
 //Les cookies expirent à la fermeture du navigateur
 user_pref("network.cookie.lifetimePolicy", 2);
+//Empécher la mise en cache de page web, emails ou autres sur le disque dur
+user_pref("browser.cache.disk.enable", false);
+//Idem pour les pages SSL
+user_pref("browser.cache.disk_cache_ssl", false);
+//Ne conserver aucune informations concernant les sessions (formulaires, cookies, données POST, ...)
+user_pref("browser.sessionstore.privacy_level", 2);
 
+/**********
+* Gestion des mots de passe
+**********/
+//Enregistrer les mots de passe
+user_pref("signon.rememberSignons", true);
+//Permet d'activer l'option pour enregistrer les mots de passe
+user_pref("signon.rememberSignons", true);
+ 
 /**********
 * Ergonomie
 **********/
