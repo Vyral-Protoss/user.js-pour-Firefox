@@ -154,7 +154,7 @@ user_pref("network.http.pipelining", true);
 user_pref("network.http.proxy.pipelining", true);
 //Nombre de connexions simultanées
 user_pref("network.http.max-connections", 256);
-user_pref("network.http.pipelining.maxrequests", 32);
+user_pref("network.http.pipelining.maxrequests", 8);
 user_pref("network.http.max-connections-per-server", 16);
 user_pref("network.http.max-persistent-connections-per-proxy", 8);
 user_pref("network.http.max-persistent-connections-per-server", 8);
@@ -164,12 +164,6 @@ user_pref("network.dns.disablePrefetch", true);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
 //Désactiver pré-chargement d'un site dont on survole le lien
 user_pref("network.http.speculative-parallel-limit", 0);
-//Media HTML5
-user_pref("media.mediasource.enabled", true);
-user_pref("media.mediasource.webm.enabled", false);
-user_pref("media.mediasource.youtubeonly", false);
-user_pref("media.fragmented-mp4.exposed", true);
-user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
 //Activer SPDY
 user_pref("network.http.spdy.enabled", true);
 user_pref("network.http.spdy.enabled.v3", true);
@@ -244,4 +238,18 @@ user_pref("browser.casting.enabled", false);
 user_pref("browser.aboutHomeSnippets.updateUrl", "");
 //Désactiver la vérification des plugins à chaque redémarrage
 user_pref("plugins.update.notifyUser", false);
+//Désactive le scrolling ralenti
+user_pref("general.smoothScroll", false);
+//Réserve de l'espace sur la page pour les images en cours de chargement
+user_pref("browser.display.show_image_placeholders", false);
+//Désactiver l'animation des onglets
+user_pref("browser.tabs.animate", false);
 
+/**********
+* Media HTML5
+**********/
+user_pref("media.mediasource.enabled", true);
+user_pref("media.mediasource.webm.enabled", false);
+user_pref("media.mediasource.youtubeonly", false);
+user_pref("media.fragmented-mp4.exposed", true);
+user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
