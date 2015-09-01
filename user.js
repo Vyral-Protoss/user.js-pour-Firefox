@@ -49,6 +49,8 @@ user_pref("browser.send_pings", false);
 user_pref("dom.gamepad.enabled", false);
 //Outil de réalité virtuelle
 user_pref("dom.vr.enabled", false);
+//WebGL
+user_pref("webgl.disabled", true);
 //Démarrer automatiquement le navigateur en mode navigation privée
 user_pref("browser.privatebrowsing.autostart", false);
 //Content Security Policy
