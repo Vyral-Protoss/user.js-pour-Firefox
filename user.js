@@ -201,9 +201,7 @@ user_pref("browser.sessionstore.privacy_level", 2);
 /**********
 * Gestion des mots de passe
 **********/
-//Enregistrer les mots de passe
-user_pref("signon.rememberSignons", true);
-//Permet d'activer l'option pour enregistrer les mots de passe
+//Permet d'activer l'option pour enregistrer les mots de passe. Pour désactiver, changer true en false
 user_pref("signon.rememberSignons", true);
  
 /**********
