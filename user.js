@@ -21,13 +21,22 @@ user_pref("network.http.referer.trimmingPolicy", 1);
 //Safebrowsing
 user_pref("browser.safebrowsing.enabled", true);
 user_pref("browser.safebrowsing.malware.enabled", true);
-user_pref("browser.safebrowsing.downloads.enabled", false);
+//Safebrowsing, contrôler les fichiers téléchargés uniquement en local
+user_pref("browser.safebrowsing.downloads.enabled", true);
+user_pref("browser.safebrowsing.downloads.remote.enabled", false);
+//Vérifier l'intégrité d'une page web Firefox 43+
+user_pref("security.csp.enable", true);
+user_pref("security.sri.enable", true);
 //Tracking
 user_pref("privacy.trackingprotection.enabled", true);
 //Statistiques
 user_pref("datareporting.healthreport.service.enabled", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
+user_pref("datareporting.policy.dataSubmissionEnabled", false);
 user_pref("toolkit.telemetry.enabled", false);
+user_pref("toolkit.telemetry.unified", false);
+user_pref("experiments.supported", false);
+user_pref("experiments.enabled", false);
 //Addons listing
 user_pref("plugins.enumerable_names", "");
 //UserMedia
