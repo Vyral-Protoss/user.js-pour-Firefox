@@ -12,10 +12,11 @@ user_pref("geo.enabled", false);
 user_pref("geo.wifi.uri", "");
 user_pref("browser.search.geoip.url", "");
 //WebRTC
+user_pref("media-peerconnection.ice.default_address_only", true);
 user_pref("media.peerconnection.enabled", false);
 //Referer
-user_pref("network.http.referer.spoofSource", false);
-user_pref("network.http.sendRefererHeader", 1);
+user_pref("network.http.sendRefererHeader", 2);
+user_pref("network.http.referer.spoofSource", false);	//true empêche certains sites de fonctionner
 user_pref("network.http.referer.XOriginPolicy", 1);
 user_pref("network.http.referer.trimmingPolicy", 1);
 //Safebrowsing
@@ -37,8 +38,6 @@ user_pref("toolkit.telemetry.enabled", false);
 user_pref("toolkit.telemetry.unified", false);
 user_pref("experiments.supported", false);
 user_pref("experiments.enabled", false);
-//Addons listing
-user_pref("plugins.enumerable_names", "");
 //UserMedia
 user_pref("media.navigator.enabled", false);
 user_pref("dom.battery.enabled", false);
@@ -46,6 +45,8 @@ user_pref("dom.telephony.enabled", false);
 user_pref("beacon.enabled", false);
 user_pref("dom.event.clipboardevents.enabled", false);
 user_pref("dom.enable_performance", false);
+//Reconnaissance faciale
+user_pref("camera.control.face_detection.enabled", false);
 //Reconnaissance vocale
 user_pref("media.webspeech.recognition.enable", false);
 //Partage d'écran
@@ -156,6 +157,10 @@ user_pref("plugin.state.flash", 0);
 user_pref("plugins.click_to_play", true);
 //Mise à jour automatique des addons
 user_pref("extensions.update.enabled", true);
+//Ne pas mettre à jour les méta-données des extensions
+user_pref("extensions.getAddons.cache.enabled", false);
+//Ne pas envoyer la liste des extensions installées aux sites web
+user_pref("plugins.enumerable_names", "");
 
 /**********
 * Vitesse de connexion
@@ -255,6 +260,21 @@ user_pref("browser.display.show_image_placeholders", false);
 user_pref("browser.tabs.animate", false);
 
 /**********
+* NewTabPage
+**********/
+//Activer NewTabPage
+user_pref("browser.newtabpage.enabled", true);
+//Afficher NewTabPage lorsque l'on ouvre un nouvel onglet vide
+user_pref("browser.newtab.url", "");
+user_pref("browser.newtab.preload", false);
+//Désactiver la pub
+user_pref("browser.newtabpage.enhanced", false);
+//Désactiver la capture d'écran pour aperçu dans NewTabPage
+user_pref("browser.pagethumbnails.capturing_disabled", true);
+user_pref("browser.newtabpage.directory.ping", "");
+user_pref("browser.newtabpage.directory.source", "");
+
+/**********
 * Media HTML5
 **********/
 user_pref("media.mediasource.enabled", true);
@@ -262,3 +282,7 @@ user_pref("media.mediasource.webm.enabled", false);
 user_pref("media.mediasource.youtubeonly", false);
 user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
+// Ne pas lire automatiquement les contenus multimédia
+user_pref("media.autoplay.enabled", false);
+//Codecs video H264
+user_pref("media.gmp-provider.enabled", true);
