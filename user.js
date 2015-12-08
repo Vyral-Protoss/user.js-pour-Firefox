@@ -7,6 +7,13 @@
 /**********
 * Sécurité et vie privée
 **********/
+//Modifier l'UserAgent qui indique le navigateur et l'OS de l'utilisateur aux sites visités
+//cf https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
+//ou http://www.browser-info.net/useragents
+user_pref("general.useragent.override", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36");
+//Do Not Track (DNT) header
+//Dire aux sites web que je ne souhaite pas être pisté
+user_pref("privacy.donottrackheader.enabled", true);
 //Géolocalisation
 user_pref("geo.enabled", false);
 user_pref("geo.wifi.uri", "");
@@ -147,6 +154,9 @@ user_pref("security.tls.version.max", 3);
 user_pref("security.enable_ssl3", false);
 user_pref("security.ssl3.dhe_rsa_aes_128_sha", false);
 user_pref("security.ssl3.dhe_rsa_aes_256_sha", false);
+//Conservé pour des raisons de compatibilité
+user_pref("security.ssl3.rsa_aes_256_sha", true);
+user_pref("security.ssl3.rsa_aes_128_sha", true);
 
 /**********
 * Extensions et plugins
@@ -180,10 +190,12 @@ user_pref("network.dns.disablePrefetch", true);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
 //Désactiver pré-chargement d'un site dont on survole le lien
 user_pref("network.http.speculative-parallel-limit", 0);
-//Activer SPDY
-user_pref("network.http.spdy.enabled", true);
-user_pref("network.http.spdy.enabled.v3", true);
-user_pref("network.http.spdy.enabled.v3-1", true);
+//SPDY abandonné pour HTTP2
+user_pref("network.http.spdy.enabled", false);
+user_pref("network.http.spdy.enabled.v3", false);
+user_pref("network.http.spdy.enabled.v3-1", false);
+//HTTP2
+user_pref("network.http.spdy.enabled.http2", true);
 
 /**********
 * Gestion du cache
@@ -205,6 +217,10 @@ user_pref("browser.cache.offline.enable", false);
 user_pref("places.history.enabled", false);
 //Les cookies expirent à la fermeture du navigateur
 user_pref("network.cookie.lifetimePolicy", 2);
+//Cookies
+// 1 = Ne jamais accepter les cookies tiers
+// 3 = Accepter uniquement ceux depuis les sites visités
+user_pref("network.cookie.cookieBehavior", 1);
 //Empécher la mise en cache de page web, emails ou autres sur le disque dur
 user_pref("browser.cache.disk.enable", false);
 //Idem pour les pages SSL
@@ -258,6 +274,9 @@ user_pref("general.smoothScroll", false);
 user_pref("browser.display.show_image_placeholders", false);
 //Désactiver l'animation des onglets
 user_pref("browser.tabs.animate", false);
+//Ne pas essayer de deviner ce qui est tapé dans l'URL
+//Ex: "http://foo" -> "http://(prefix)foo(suffix)"
+user_pref("browser.fixup.alternate.enabled", false);
 
 /**********
 * NewTabPage
