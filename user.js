@@ -6,7 +6,7 @@
 ******************************/
 
 //Paramétrage Firefox en Français
-user_pref("general.useragent.locale, "fr");
+user_pref("general.useragent.locale", "fr");
 user_pref("browser.search.countryCode", "FR");
 user_pref("browser.search.region", "FR");
 
