@@ -25,7 +25,7 @@ user_pref("geo.enabled", false);
 user_pref("geo.wifi.uri", "");
 user_pref("browser.search.geoip.url", "");
 //WebRTC
-user_pref("media-peerconnection.ice.default_address_only", true);
+user_pref("media.peerconnection.ice.default_address_only", true);
 user_pref("media.peerconnection.enabled", false);
 //Referer
 user_pref("network.http.sendRefererHeader", 2);
