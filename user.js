@@ -237,8 +237,10 @@ user_pref("signon.rememberSignons", false);
 * Ergonomie et performances
 **********/
 //Activer E10 - multiprocess (FF 43 à 46)
-user_pref("browser.tabs.remote.autostart", true);
-user_pref("layers.offmainthreadcomposition.testing.enabled", true);
+//user_pref("browser.tabs.remote.autostart", true);
+//user_pref("layers.offmainthreadcomposition.testing.enabled", true);
+//Forcer l'activation de E10 pour FF46
+user_pref("browser.tabs.remote.force-enable", true);
 //Supprimer les messages possibles au démarrage
 user_pref("browser.slowStartup.notificationDisabled", true);
 user_pref("browser.slowStartup.maxSamples", 0);
