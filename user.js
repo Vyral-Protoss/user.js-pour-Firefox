@@ -337,8 +337,11 @@ user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
 //Ne pas lire automatiquement les contenus multimédia
 user_pref("media.autoplay.enabled", false);
-//Codecs video H264
-user_pref("media.gmp-provider.enabled", true);
+//Codecs video H264 pour WebRTC
+user_pref("media.gmp-provider.enabled", false);
+//Plugin pour lire les contenus DRM
+user_pref("media.eme.enabled", false);
+user_pref("media.gmp-eme-adobe.enabled", false);
 
 /**********
 * API intégrées dans Firefox
@@ -400,3 +403,7 @@ user_pref("browser.readinglist.enabled", false);
 user_pref("loop.enabled", false);
 //Désactiver le lecteur PDF interne à Firefox
 user_pref("pdfjs.disabled", true);
+//Demander la permission au lieu de rafraichir automatiquement la page
+user_pref("accessibility.blockautorefresh", true);
+//Ne pas faire de recherche sur ce qui est tapé dans la barre d'adresse si ce n'est pas une URL valide
+user_pref("keyword.enabled", false);
