@@ -241,6 +241,9 @@ user_pref("signon.rememberSignons", false);
 //user_pref("layers.offmainthreadcomposition.testing.enabled", true);
 //Forcer l'activation de E10 pour FF46
 user_pref("browser.tabs.remote.force-enable", true);
+//Nombre de processus pour E10 (par défaut : 1)
+//Calcul: nb coeurs processeur x2 (ex: Dual-Core => 4 ; Quad-Core => 8 ; ...)
+user_pref("dom.ipc.processCount", 4);
 //Supprimer les messages possibles au démarrage
 user_pref("browser.slowStartup.notificationDisabled", true);
 user_pref("browser.slowStartup.maxSamples", 0);
