@@ -47,6 +47,9 @@ user_pref("datareporting.healthreport.service.enabled", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("datareporting.policy.dataSubmissionEnabled", false);
 user_pref("datareporting.policy.dataSubmissionEnabled.v2", false);
+//Ne pas sauvegarder les résultat de télémétrie en local
+//http://www.ghacks.net/2015/11/09/how-to-disable-the-firefox-saved-telemetry-pings-and-archive-folder/
+user_pref("toolkit.telemetry.archive.enabled", false);
 //Désactiver Heartbeat
 user_pref("browser.selfsupport.url", "");
 //UserMedia
@@ -337,11 +340,15 @@ user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
 //Ne pas lire automatiquement les contenus multimédia
 user_pref("media.autoplay.enabled", false);
-//Codecs video H264 pour WebRTC
-user_pref("media.gmp-provider.enabled", false);
-//Plugin pour lire les contenus DRM
+//Permettre la lecture des vidéos avec DRM
 user_pref("media.eme.enabled", false);
+//Permettre d'activer/désactiver la préférence précédente dans les options
+user_pref("browser.eme.ui.enabled", false);
+//Plugin pour lire les vidéo avec DRM
 user_pref("media.gmp-eme-adobe.enabled", false);
+//Codecs vidéo pour WebRTC
+user_pref("media.gmp-provider.enabled", false);
+user_pref("media.gmp-gmpopenh264.provider.enabled", false);
 
 /**********
 * API intégrées dans Firefox
