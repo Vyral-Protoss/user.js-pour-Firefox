@@ -147,7 +147,7 @@ user_pref("security.ssl3.dhe_dss_camellia_256_sha", false);
 //TLS
 user_pref("security.enable_tls_session_tickets", false);
 //Devrait être défini à 2 car TLS1 n'est plus sécurisé mais beaucoup de sites ne supportent pas les versions supérieurs
-user_pref("security.tls.version.min", 2);
+user_pref("security.tls.version.min", 1);
 user_pref("security.tls.version.max", 3);
 //Désactiver SSLv3
 user_pref("security.enable_ssl3", false);
