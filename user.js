@@ -5,11 +5,6 @@
 * Faire un back-up du fichier prefs.js avant de copier user.js dans le répertoire profile
 ******************************/
 
-//Paramétrage Firefox en Français
-user_pref("general.useragent.locale", "fr");
-user_pref("browser.search.countryCode", "FR");
-user_pref("browser.search.region", "FR");
-
 /**********
 * Vie privée
 **********/
@@ -57,6 +52,9 @@ user_pref("media.navigator.enabled", false);
 user_pref("beacon.enabled", false);
 //Démarrer automatiquement le navigateur en mode navigation privée
 user_pref("browser.privatebrowsing.autostart", false);
+//Désactiver debug à distance
+user_pref("devtools.debugger.remote-enabled", false);
+user_pref("devtools.debugger.force-local", true);
 
 /**********
 * Sécurité
@@ -149,7 +147,7 @@ user_pref("security.ssl3.dhe_dss_camellia_256_sha", false);
 //TLS
 user_pref("security.enable_tls_session_tickets", false);
 //Devrait être défini à 2 car TLS1 n'est plus sécurisé mais beaucoup de sites ne supportent pas les versions supérieurs
-user_pref("security.tls.version.min", 1);
+user_pref("security.tls.version.min", 2);
 user_pref("security.tls.version.max", 3);
 //Désactiver SSLv3
 user_pref("security.enable_ssl3", false);
@@ -158,6 +156,8 @@ user_pref("security.ssl3.dhe_rsa_aes_256_sha", false);
 //Conservé pour des raisons de compatibilité
 user_pref("security.ssl3.rsa_aes_256_sha", true);
 user_pref("security.ssl3.rsa_aes_128_sha", true);
+//Sécurité strict - Ne fonctionne pas encore
+//user_pref("security.ssl.require_safe_negotiation", true);
 
 /**********
 * Extensions et plugins
@@ -264,6 +264,7 @@ user_pref("browser.shell.checkDefaultBrowser", false);
 //Mise à jour manuelle : Menu > Aide > À propos de Firefox > Rechercher des mises à jour
 user_pref("app.update.enabled", false);
 user_pref("app.update.auto", false);
+user_pref("app.update.service.enabled", false);
 //Ne pas quitter le navigateur si on ferme le dernier onglet
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 //Montrer l'url complète (avec http ou https)
@@ -335,7 +336,7 @@ user_pref("browser.newtabpage.directory.source", "");
 * Media HTML5
 **********/
 user_pref("media.mediasource.enabled", true);
-user_pref("media.mediasource.webm.enabled", false);
+user_pref("media.mediasource.webm.enabled", true);
 user_pref("media.mediasource.youtubeonly", false);
 user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
@@ -400,10 +401,12 @@ user_pref("social.share.activationPanelEnabled", false);
 * Extensions intégrées dans Firefox
 **********/
 //Pocket
-user_pref("browser.pocket.enabled", false);
+//user_pref("browser.pocket.enabled", false);
 user_pref("browser.pocket.api", "");
 user_pref("browser.pocket.site", "");
 user_pref("browser.pocket.oAuthConsumerKey", "");
+//FF46+
+user_pref("extensions.pocket.enabled", false);
 //Reader
 user_pref("reader.parse-on-load.enabled", false);
 user_pref("browser.readinglist.enabled", false);
@@ -411,7 +414,22 @@ user_pref("browser.readinglist.enabled", false);
 user_pref("loop.enabled", false);
 //Désactiver le lecteur PDF interne à Firefox
 user_pref("pdfjs.disabled", true);
+
+/**********
+* Préférences personnelles
+**********/
+//Page d'acceuil
+user_pref("browser.startup.homepage", "about:newtab");
+//Paramétrage Firefox en Français
+user_pref("general.useragent.locale", "fr");
+user_pref("browser.search.countryCode", "FR");
+user_pref("browser.search.region", "FR");
+user_pref("spellchecker.dictionary", "fr");
+//Couleur arrière-plan par défaut
+user_pref("browser.display.background_color", "#c1c1c1");
 //Demander la permission au lieu de rafraichir automatiquement la page
 user_pref("accessibility.blockautorefresh", true);
 //Ne pas faire de recherche sur ce qui est tapé dans la barre d'adresse si ce n'est pas une URL valide
 user_pref("keyword.enabled", false);
+//Activer les outils développeur pour le navigateur en plus du contenu web
+user_pref("devtools.chrome.enabled", false);
