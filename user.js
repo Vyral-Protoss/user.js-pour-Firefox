@@ -1,9 +1,17 @@
 /******************************
-* user.js - Vyral - 13/04/2015
+* user.js - Vyral - créé le 13/04/2015
 * Source : http://kb.mozillazine.org/User.js_file
 * A placer dans le répertoire profile de firefox : %APPDATA%\Mozilla\Firefox\Profiles\
 * Faire un back-up du fichier prefs.js avant de copier user.js dans le répertoire profile
 ******************************/
+
+/**********
+* Spécifiques Linux (Mint)
+**********/
+//user_pref("network.protocol-handler.app.apt", "/usr/bin/apturl");
+//user_pref("network.protocol-handler.app.apt+http", "/usr/bin/apturl");
+//user_pref("network.protocol-handler.warn-external.apt", true);
+//user_pref("network.protocol-handler.warn-external.apt+http", true);
 
 /**********
 * Vie privée
@@ -17,18 +25,21 @@
 user_pref("privacy.donottrackheader.enabled", true);
 //Géolocalisation
 user_pref("geo.enabled", false);
+user_pref("geo.wifi.logging.enabled", false);
 user_pref("geo.wifi.uri", "");
+user_pref("browser.search.geoip.timeout", 1);
 user_pref("browser.search.geoip.url", "");
-//WebRTC
-user_pref("media.peerconnection.ice.default_address_only", true);
-user_pref("media.peerconnection.enabled", false);
+user_pref("geo.wifi.xhr.timeout", 1);
 //Referer
 user_pref("network.http.sendRefererHeader", 2);
 user_pref("network.http.referer.spoofSource", false);	//true empêche certains sites de fonctionner
 user_pref("network.http.referer.XOriginPolicy", 1);
 user_pref("network.http.referer.trimmingPolicy", 1);
-//Tracking
-user_pref("privacy.trackingprotection.enabled", true);
+//Protection contre le pistage - Désactivé car l'extension uBlock Origin est plus efficace
+user_pref("privacy.trackingprotection.enabled", false);
+user_pref("browser.trackingprotection.gethashURL", "");
+user_pref("browser.trackingprotection.updateURL", "");
+user_pref("privacy.trackingprotection.pbmode.enabled", false);
 //Statistiques
 user_pref("toolkit.telemetry.enabled", false);
 user_pref("toolkit.telemetry.unified", false);
@@ -55,16 +66,35 @@ user_pref("browser.privatebrowsing.autostart", false);
 //Désactiver debug à distance
 user_pref("devtools.debugger.remote-enabled", false);
 user_pref("devtools.debugger.force-local", true);
+//Protection intégrée à Firefox contre le pistage
+user_pref("privacy.resistFingerprinting", true);
+//Ne pas gérer le statut de la connexion
+user_pref("network.manage-offline-status", false);
+//Ne pas faire de rapport sur les connexions chiffrées avec erreurs
+user_pref("security.ssl.errorReporting.enabled", false);
 
 /**********
 * Sécurité
 **********/
-//Safebrowsing
-user_pref("browser.safebrowsing.enabled", true);
-user_pref("browser.safebrowsing.malware.enabled", true);
-//Safebrowsing, contrôler les fichiers téléchargés uniquement en local
-user_pref("browser.safebrowsing.downloads.enabled", true);
+//Désactiver safebrowsing
+user_pref("browser.safebrowsing.enabled", false);
+user_pref("browser.safebrowsing.malware.enabled", false);
+//Ne pas consulter une base de données externe pour savoir si le site visité est légitime
+user_pref("browser.safebrowsing.remoteLookups", false);
+//Ne pas contrôler les fichiers téléchargés
+user_pref("browser.safebrowsing.downloads.enabled", false);
+//Si l'option ci-dessus est activée, cette option permet de contrôler les fichiers uniquement en local
 user_pref("browser.safebrowsing.downloads.remote.enabled", false);
+//Supprimer les liens où Firefox récupère les informations pour le safebrowsing
+user_pref("browser.safebrowsing.reportMalwareMistakeURL", "");
+user_pref("browser.safebrowsing.reportPhishMistakeURL", "");
+user_pref("browser.safebrowsing.reportPhishURL", "");
+user_pref("browser.safebrowsing.appRepURL", "");
+user_pref("browser.safebrowsing.provider.google.gethashURL", "");
+user_pref("browser.safebrowsing.provider.google.reportURL", "");
+user_pref("browser.safebrowsing.provider.google.updateURL", "");
+user_pref("browser.safebrowsing.provider.mozilla.gethashURL", "");
+user_pref("browser.safebrowsing.provider.mozilla.updateURL", "");
 //Vérifier l'intégrité d'une page web Firefox 43+
 user_pref("security.csp.enable", true);
 user_pref("security.sri.enable", true);
@@ -158,6 +188,11 @@ user_pref("security.ssl3.rsa_aes_256_sha", true);
 user_pref("security.ssl3.rsa_aes_128_sha", true);
 //Sécurité strict - Ne fonctionne pas encore
 //user_pref("security.ssl.require_safe_negotiation", true);
+//Nouveaux chiffrements : ChaCha20 et Poly1305
+user_pref("security.ssl3.ecdhe_ecdsa_chacha20_poly1305_sha256", true);
+user_pref("security.ssl3.ecdhe_rsa_chacha20_poly1305_sha256", true);
+//Bloquer les connexions non chiffrées vers du contenu actif sur une page chiffrée
+user_pref("security.mixed_content.block_active_content", true);
 
 /**********
 * Extensions et plugins
@@ -174,6 +209,8 @@ user_pref("extensions.getAddons.cache.enabled", false);
 user_pref("plugins.enumerable_names", "");
 //Empécher les extensions d'utiliser les scripts XPCOM ou XPConnect
 //user_pref("security.xpconnect.plugin.unrestricted", false);
+//Par défaut, les plugins sont désactivés
+user_pref("plugin.default.state", 0);
 
 /**********
 * Vitesse de connexion
@@ -203,6 +240,8 @@ user_pref("network.http.spdy.enabled.http2", true);
 /**********
 * Gestion du cache
 **********/
+//Activer mise en cache
+user_pref("browser.cache.memory.enable", true);
 //Nettoyage à la fermeture du navigateur
 user_pref("privacy.sanitize.sanitizeOnShutdown", true);
 user_pref("privacy.clearOnShutdown.cache", true);
@@ -230,6 +269,7 @@ user_pref("browser.cache.disk.enable", false);
 user_pref("browser.cache.disk_cache_ssl", false);
 //Ne conserver aucune informations concernant les sessions (formulaires, cookies, données POST, ...)
 user_pref("browser.sessionstore.privacy_level", 2);
+user_pref("browser.sessionstore.privacy_level_deferred", 2);
 
 /**********
 * Gestion des mots de passe
@@ -306,16 +346,8 @@ user_pref("dom.event.contextmenu.enabled", false);
 user_pref("dom.popup_maximum", 3);
 //Toujours demander dans quel répertoire doit être télécharger un fichier
 //user_pref("browser.download.useDownloadDir", false);
-/** Polices de caractères **/
-//Désactiver les polices de caractères au format SVG
-user_pref("gfx.font_rendering.opentype_svg.enabled", false);
-//Polices de caractères par défaut
-user_pref("font.name.serif.x-unicode", "Georgia");
-user_pref("font.name.serif.x-western", "Georgia"); //par défaut Times New Roman
-user_pref("font.name.sans-serif.x-unicode", "Arial");
-user_pref("font.name.sans-serif.x-western", "Arial");  //par défaut Arial
-user_pref("font.name.monospace.x-unicode", "Lucida Console");
-user_pref("font.name.monospace.x-western", "Lucida Console"); //par défaut Courier New
+//Supprimer les fichiers temporaires à la fermeture du navigateur
+user_pref("browser.helperApps.deleteTempFileOnExit", true);
 
 /**********
 * NewTabPage
@@ -342,13 +374,21 @@ user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
 //Ne pas lire automatiquement les contenus multimédia
 user_pref("media.autoplay.enabled", false);
-//Permettre la lecture des vidéos avec DRM
+//Désactive la possibilité de regarder des vidéos HTML5 sur d'autres appareils sur le réseau
+user_pref("browser.casting.enabled", false);
+//EME (Adobe "Primetime Content Decryption Module" DRM)
 user_pref("media.eme.enabled", false);
-//Permettre d'activer/désactiver la préférence précédente dans les options
 user_pref("browser.eme.ui.enabled", false);
-//Plugin pour lire les vidéo avec DRM
 user_pref("media.gmp-eme-adobe.enabled", false);
-//Codecs vidéo pour WebRTC
+user_pref("media.eme.apiVisible", false);
+//WebRTC
+user_pref("media.gmp-gmpopenh264.enabled", false);
+user_pref("media.gmp-manager.url", "");
+user_pref("media.peerconnection.enabled", false);
+user_pref("media.peerconnection.ice.default_address_only", true);
+user_pref("media.peerconnection.identity.timeout", 1);
+user_pref("media.peerconnection.turn.disable", true);
+user_pref("media.peerconnection.video.enabled", false);
 user_pref("media.gmp-provider.enabled", false);
 user_pref("media.gmp-gmpopenh264.provider.enabled", false);
 
@@ -396,6 +436,8 @@ user_pref("social.shareDirectory", "");
 user_pref("social.remote-install.enabled", false);
 user_pref("social.directories", "");
 user_pref("social.share.activationPanelEnabled", false);
+//Donne les informations de connexion de l'utilisateur (e.g. connecté en Wifi)
+user_pref("dom.netinfo.enabled", false);
 
 /**********
 * Extensions intégrées dans Firefox
@@ -425,6 +467,16 @@ user_pref("general.useragent.locale", "fr");
 user_pref("browser.search.countryCode", "FR");
 user_pref("browser.search.region", "FR");
 user_pref("spellchecker.dictionary", "fr");
+/** Polices de caractères **/
+//Désactiver les polices de caractères au format SVG
+user_pref("gfx.font_rendering.opentype_svg.enabled", false);
+//Polices de caractères par défaut
+user_pref("font.name.serif.x-unicode", "Georgia");
+user_pref("font.name.serif.x-western", "Georgia"); //par défaut Times New Roman
+user_pref("font.name.sans-serif.x-unicode", "Arial");
+user_pref("font.name.sans-serif.x-western", "Arial");  //par défaut Arial
+user_pref("font.name.monospace.x-unicode", "Lucida Console");
+user_pref("font.name.monospace.x-western", "Lucida Console"); //par défaut Courier New
 //Couleur arrière-plan par défaut
 user_pref("browser.display.background_color", "#c1c1c1");
 //Demander la permission au lieu de rafraichir automatiquement la page
@@ -433,3 +485,9 @@ user_pref("accessibility.blockautorefresh", true);
 user_pref("keyword.enabled", false);
 //Activer les outils développeur pour le navigateur en plus du contenu web
 user_pref("devtools.chrome.enabled", false);
+//Désactiver présentation de l'interface
+user_pref("browser.uitour.enabled", false);
+//Ne pas ajouter les fichiers téléchargés au menu Windows des fichiers récents
+user_pref("browser.download.manager.addToRecentDocs", false);
+//Désactiver le message affiché lorsque l'on passe en plein écran
+user_pref("full-screen-api.warning.timeout", 0);
