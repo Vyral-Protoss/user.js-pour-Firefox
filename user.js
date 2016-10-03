@@ -1,5 +1,5 @@
 /******************************
-* user.js - Vyral - créé le 13/04/2015
+* user.js - Vyral - 13/04/2015
 * Source : http://kb.mozillazine.org/User.js_file
 * A placer dans le répertoire profile de firefox : %APPDATA%\Mozilla\Firefox\Profiles\
 * Faire un back-up du fichier prefs.js avant de copier user.js dans le répertoire profile
@@ -61,7 +61,7 @@ user_pref("browser.selfsupport.url", "");
 //UserMedia
 user_pref("media.navigator.enabled", false);
 user_pref("beacon.enabled", false);
-//Démarrer automatiquement le navigateur en mode navigation privée
+//Ne pas démarrer automatiquement le navigateur en mode navigation privée automatiquement
 user_pref("browser.privatebrowsing.autostart", false);
 //Désactiver debug à distance
 user_pref("devtools.debugger.remote-enabled", false);
@@ -72,6 +72,14 @@ user_pref("privacy.resistFingerprinting", true);
 user_pref("network.manage-offline-status", false);
 //Ne pas faire de rapport sur les connexions chiffrées avec erreurs
 user_pref("security.ssl.errorReporting.enabled", false);
+//Ne pas envoyer le rapport de crash quand il y en a
+user_pref("browser.tabs.crashReporting.sendReport", false);
+//Désactiver les rapports d'erreurs SSL
+user_pref("security.ssl.errorReporting.automatic", false);
+user_pref("security.ssl.errorReporting.enabled", false);
+user_pref("security.ssl.errorReporting.url", "");
+//Ne pas utiliser d'identifiant unique pour les connexions SSL (permet normalement de se reconnecter plus vite avec)
+user_pref("security.ssl.disable_session_identifiers", true);
 
 /**********
 * Sécurité
@@ -98,8 +106,6 @@ user_pref("browser.safebrowsing.provider.mozilla.updateURL", "");
 //Vérifier l'intégrité d'une page web Firefox 43+
 user_pref("security.csp.enable", true);
 user_pref("security.sri.enable", true);
-//Content Security Policy
-user_pref("security.csp.enable", true);
 //Désactiver authentification non sécurisée
 user_pref("network.negotiate-auth.allow-insecure-ntlm-v1", false);
 //Avertir lorsque le site web utilise un chiffrement faible
@@ -109,9 +115,12 @@ user_pref("network.stricttransportsecurity.preloadlist", true);
 //Activer Online Certificate Status Protocol
 user_pref("security.OCSP.enabled", 1);
 user_pref("security.ssl.enable_ocsp_stapling", true);
-user_pref("security.OCSP.require", true);
+//Vérifier certification auprès de la cert authority (balance entre vie privée et sécurité)
+//Passé à false par défaut dans FF44 à cause de problèmes avec certains sites
+//user_pref("security.OCSP.require", true);
 //Public Key Pinning
-//"2. Strict. Pinning is always enforced." -- ne fonctionne pas pour moi
+//PKP (public key pinning)
+//0=désactivé 1=autoriser le MiTM de l'utilisateur (par exemple, un antivirus), 2=stricte (ne fonctionne pas pour moi)
 user_pref("security.cert_pinning.enforcement_level", 1);
 //Négociation
 user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
@@ -178,7 +187,8 @@ user_pref("security.ssl3.dhe_dss_camellia_256_sha", false);
 user_pref("security.enable_tls_session_tickets", false);
 //Devrait être défini à 2 car TLS1 n'est plus sécurisé mais beaucoup de sites ne supportent pas les versions supérieurs
 user_pref("security.tls.version.min", 1);
-user_pref("security.tls.version.max", 3);
+//1=TLS 1.0, 2=TLS 1.1, 3=TLS 1.2, 4=TLS 1.3 (FF49+)
+user_pref("security.tls.version.max", 4);
 //Désactiver SSLv3
 user_pref("security.enable_ssl3", false);
 user_pref("security.ssl3.dhe_rsa_aes_128_sha", false);
@@ -191,6 +201,9 @@ user_pref("security.ssl3.rsa_aes_128_sha", true);
 //Nouveaux chiffrements : ChaCha20 et Poly1305
 user_pref("security.ssl3.ecdhe_ecdsa_chacha20_poly1305_sha256", true);
 user_pref("security.ssl3.ecdhe_rsa_chacha20_poly1305_sha256", true);
+//SHA-1
+//0=autoriser, 1=désactiver, 2=autoriser jusqu'au 01-01-2016
+//user_pref("security.pki.sha1_enforcement_level", 1);
 //Bloquer les connexions non chiffrées vers du contenu actif sur une page chiffrée
 user_pref("security.mixed_content.block_active_content", true);
 
@@ -203,6 +216,7 @@ user_pref("plugin.state.flash", 0);
 user_pref("plugins.click_to_play", true);
 //Mise à jour automatique des addons
 user_pref("extensions.update.enabled", true);
+user_pref("extensions.update.autoUpdateDefault", true);
 //Ne pas mettre à jour les méta-données des extensions
 user_pref("extensions.getAddons.cache.enabled", false);
 //Ne pas envoyer la liste des extensions installées aux sites web
@@ -234,6 +248,7 @@ user_pref("network.http.speculative-parallel-limit", 0);
 user_pref("network.http.spdy.enabled", false);
 user_pref("network.http.spdy.enabled.v3", false);
 user_pref("network.http.spdy.enabled.v3-1", false);
+user_pref("network.http.spdy.enabled.deps", false);
 //HTTP2
 user_pref("network.http.spdy.enabled.http2", true);
 
@@ -300,11 +315,6 @@ user_pref("browser.feeds.showFirstRunUI", false);
 user_pref("browser.usedOnWindows10.introURL", "");
 //Ne pas vérifier le navigateur par défaut au démarrage
 user_pref("browser.shell.checkDefaultBrowser", false);
-//Empécher le navigateur de se mettre à jour automatiquement
-//Mise à jour manuelle : Menu > Aide > À propos de Firefox > Rechercher des mises à jour
-user_pref("app.update.enabled", false);
-user_pref("app.update.auto", false);
-user_pref("app.update.service.enabled", false);
 //Ne pas quitter le navigateur si on ferme le dernier onglet
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 //Montrer l'url complète (avec http ou https)
@@ -385,7 +395,8 @@ user_pref("media.eme.apiVisible", false);
 user_pref("media.gmp-gmpopenh264.enabled", false);
 user_pref("media.gmp-manager.url", "");
 user_pref("media.peerconnection.enabled", false);
-user_pref("media.peerconnection.ice.default_address_only", true);
+user_pref("media.peerconnection.ice.default_address_only", true); //FF50-
+user_pref("media.peerconnection.ice.no_host", true); //FF51+
 user_pref("media.peerconnection.identity.timeout", 1);
 user_pref("media.peerconnection.turn.disable", true);
 user_pref("media.peerconnection.video.enabled", false);
@@ -429,6 +440,8 @@ user_pref("webgl.disabled", true);
 user_pref("pdfjs.enableWebGL", false);
 user_pref("webgl.min_capability_mode", true);
 user_pref("webgl.disable-extensions", true);
+user_pref("webgl.disable-fail-if-major-performance-caveat", true);
+user_pref("webgl.enable-debug-renderer-info", false);
 //Social_API
 user_pref("social.whitelist", "");
 user_pref("social.toast-notifications.enabled", false);
@@ -452,8 +465,18 @@ user_pref("extensions.pocket.enabled", false);
 //Reader
 user_pref("reader.parse-on-load.enabled", false);
 user_pref("browser.readinglist.enabled", false);
+//Désactiver la fonctionnalité Text to Speech du mode Reader (FF49+)
+user_pref("narrate.enabled", false);
 // Firefox Hello
 user_pref("loop.enabled", false);
+user_pref("loop.server", "");
+user_pref("loop.feedback.formURL", "");
+user_pref("loop.feedback.manualFormURL", "");
+user_pref("loop.facebook.appId", "");
+user_pref("loop.facebook.enabled", false);
+user_pref("loop.facebook.fallbackUrl", "");
+user_pref("loop.facebook.shareUrl", "");
+user_pref("loop.logDomains", false);
 //Désactiver le lecteur PDF interne à Firefox
 user_pref("pdfjs.disabled", true);
 
@@ -462,12 +485,26 @@ user_pref("pdfjs.disabled", true);
 **********/
 //Page d'acceuil
 user_pref("browser.startup.homepage", "about:newtab");
+//Page d'acceuil (0=vide, 1=browser.startup.homepage, 2=restaurer session précédente)
+user_pref("browser.startup.page", 1);
+//Empécher le navigateur de se mettre à jour automatiquement
+//Mise à jour manuelle : Menu > Aide > À propos de Firefox > Rechercher des mises à jour
+user_pref("app.update.enabled", false);
+user_pref("app.update.service.enabled", false);
+//Rechercher et installer mise à jour via la fonction de recherche manuelle
+user_pref("app.update.auto", true);
 //Paramétrage Firefox en Français
+user_pref("intl.locale.matchOS", false);
 user_pref("general.useragent.locale", "fr");
 user_pref("browser.search.countryCode", "FR");
 user_pref("browser.search.region", "FR");
 user_pref("spellchecker.dictionary", "fr");
+user_pref("intl.accept_languages", "fr, fr-fr, en-US, en");
 /** Polices de caractères **/
+//Empêcher les sites de télécharger leurs propres polices de caractères
+//user_pref("browser.display.use_document_fonts", 0);
+//Autoriser les icônes
+user_pref("gfx.downloadable_fonts.enabled", true);
 //Désactiver les polices de caractères au format SVG
 user_pref("gfx.font_rendering.opentype_svg.enabled", false);
 //Polices de caractères par défaut
@@ -483,7 +520,7 @@ user_pref("browser.display.background_color", "#c1c1c1");
 user_pref("accessibility.blockautorefresh", true);
 //Ne pas faire de recherche sur ce qui est tapé dans la barre d'adresse si ce n'est pas une URL valide
 user_pref("keyword.enabled", false);
-//Activer les outils développeur pour le navigateur en plus du contenu web
+//Si true, permet d'activer les outils développeur pour le navigateur en plus du contenu web
 user_pref("devtools.chrome.enabled", false);
 //Désactiver présentation de l'interface
 user_pref("browser.uitour.enabled", false);
@@ -491,3 +528,22 @@ user_pref("browser.uitour.enabled", false);
 user_pref("browser.download.manager.addToRecentDocs", false);
 //Désactiver le message affiché lorsque l'on passe en plein écran
 user_pref("full-screen-api.warning.timeout", 0);
+//Newtab page
+user_pref("browser.newtabpage.rows", 5);
+user_pref("browser.newtabpage.columns", 5);
+/** Onglets **/
+//Ouvrir les liens dans un nouvel onglet au leiu d'une nouvelle fenêtre
+//1=fenêtre actuelle, 2=nouvelle fenêtre, 3=fenêtre la plus récente
+user_pref("browser.link.open_newwindow", 3);
+//Activer la pré-visualisation des onglets avec Ctrl+Tab
+user_pref("browser.ctrlTab.previews", true);
+//Ouvrir les liens dans un onglet à droite de l'onglet courant au lieu de à la suite des onglets déjà ouverts
+user_pref("browser.tabs.insertRelatedAfterCurrent", true);
+//À la fermeture d'un onglet, revenir à l'onglet parent s'il existe
+user_pref("browser.tabs.selectOwnerOnClose", true);
+//Lors de l'ouverture d'un lien dans un nouvel onglet, 
+//true = ne pas passer automatiquement sur celui-ci ; false = passer automatiquement sur celui-ci
+user_pref("browser.tabs.loadInBackground", true);
+//Idem mais pour les liens qui devaient ouvrir une nouvelle fenêtre
+//true = ne pas passer sur le nouvel onglet ; false = passer sur le nouvel onglet
+user_pref("browser.tabs.loadDivertedInBackground", false);
