@@ -1,141 +1,122 @@
 /******************************
 * user.js - Vyral - 13/04/2015
+* DerniÃ¨re modification : 11/07/2017
 * Source : http://kb.mozillazine.org/User.js_file
-* A placer dans le répertoire profile de firefox : %APPDATA%\Mozilla\Firefox\Profiles\
-* Faire un back-up du fichier prefs.js avant de copier user.js dans le répertoire profile
+* A placer dans le rÃ©pertoire profile de firefox : %APPDATA%\Mozilla\Firefox\Profiles\
+* Faire un back-up du fichier prefs.js avant de copier user.js dans le rÃ©pertoire profile
 ******************************/
 
-/**********
-* Spécifiques Linux (Mint)
-**********/
+/*** Pour vÃ©rifier le chargement des prÃ©fÃ©rences. Est modifiÃ© aprÃ¨s chargement complet ***/
+user_pref("user.pref.check", "Chargement en cours");
+
+
+
+/*** Language du navigateur : FranÃ§ais ***/
+user_pref("intl.locale.matchOS", false);
+user_pref("general.useragent.locale", "fr");
+user_pref("browser.search.countryCode", "FR");
+user_pref("browser.search.region", "FR");
+user_pref("spellchecker.dictionary", "fr");
+user_pref("intl.accept_languages", "fr, fr-fr, en-US, en");
+
+
+/*** SpÃ©cifiques Linux ***/
+//Gestion du protocol APT
 //user_pref("network.protocol-handler.app.apt", "/usr/bin/apturl");
 //user_pref("network.protocol-handler.app.apt+http", "/usr/bin/apturl");
 //user_pref("network.protocol-handler.warn-external.apt", true);
 //user_pref("network.protocol-handler.warn-external.apt+http", true);
 
-/**********
-* Vie privée
-**********/
-//Modifier l'UserAgent qui indique le navigateur et l'OS de l'utilisateur aux sites visités
-//cf https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
-//ou http://www.browser-info.net/useragents
+
+/*** Vie privÃ©e ***/
+//Modifier l'UserAgent qui indique le navigateur et l'OS de l'utilisateur aux sites visitÃ©s
+//cf : http://www.browser-info.net/useragents
 //user_pref("general.useragent.override", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
 //Do Not Track (DNT) header
-//Dire aux sites web que je ne souhaite pas être pisté
+//Dire aux sites web que je ne souhaite pas Ãªtre pistÃ©
 user_pref("privacy.donottrackheader.enabled", true);
-//Géolocalisation
-user_pref("geo.enabled", false);
-user_pref("geo.wifi.logging.enabled", false);
-user_pref("geo.wifi.uri", "");
-user_pref("browser.search.geoip.timeout", 1);
-user_pref("browser.search.geoip.url", "");
-user_pref("geo.wifi.xhr.timeout", 1);
 //Referer
-user_pref("network.http.sendRefererHeader", 2);
-user_pref("network.http.referer.spoofSource", false);	//true empêche certains sites de fonctionner
-user_pref("network.http.referer.XOriginPolicy", 1);
-user_pref("network.http.referer.trimmingPolicy", 1);
-//Protection contre le pistage - Désactivé car l'extension uBlock Origin est plus efficace
-user_pref("privacy.trackingprotection.enabled", false);
-user_pref("browser.trackingprotection.gethashURL", "");
-user_pref("browser.trackingprotection.updateURL", "");
-user_pref("privacy.trackingprotection.pbmode.enabled", false);
-//Statistiques
+user_pref("network.http.sendRefererHeader", 2); // 0 = ne pas envoyer ; 1 = envoyer uniquement sur les liens ; 2 = toujours envoyer (dÃ©faut)
+user_pref("network.http.referer.spoofSource", false);	//true empÃªche certains sites de fonctionner. A re-tester
+user_pref("network.http.referer.XOriginPolicy", 1); // 0 = toujours envoyer ; 1 = envoyer si le domaine correspond ; 2 = envoyer si l'hÃ´te correspond
+user_pref("network.http.referer.trimmingPolicy", 1);  // 0 = envoyer toutes les infos ; 1 = protocol + hÃ´te + port + chemin ; 2 = protocol + hÃ´te + port
+user_pref("network.http.referer.userControlPolicy", 2); // 0 = ne pas envoyer ; 1 = envoyer si le domaine correspond ; 2 = envoyer si le domaine correspond et mÃªme protocol ; 3 = ne pas envoyer si protocol diffÃ©rent (dÃ©faut)
+//DÃ©sactiver tÃ©lÃ©mÃ©trie pour Mozilla
 user_pref("toolkit.telemetry.enabled", false);
 user_pref("toolkit.telemetry.unified", false);
 user_pref("toolkit.telemetry.cachedClientID", "");
 user_pref("experiments.supported", false);
 user_pref("experiments.enabled", false);
-user_pref("experiments.manifest.uri", "");
 user_pref("experiments.activeExperiment", false);
 user_pref("network.allow-experiments", false);
 user_pref("datareporting.healthreport.service.enabled", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("datareporting.policy.dataSubmissionEnabled", false);
-//Ne pas sauvegarder les résultat de télémétrie en local
-//http://www.ghacks.net/2015/11/09/how-to-disable-the-firefox-saved-telemetry-pings-and-archive-folder/
+//Ne pas sauvegarder les rÃ©sultat de tÃ©lÃ©mÃ©trie en local
 user_pref("toolkit.telemetry.archive.enabled", false);
-//Désactiver Heartbeat
+//DÃ©sactiver Heartbeat (tÃ©lÃ©mÃ©trie Firefox)
 user_pref("browser.selfsupport.url", "");
-//UserMedia
-user_pref("media.navigator.enabled", false);
+//Ne pas envoyer de donnÃ©es au site lorsque l'on quitte une page
 user_pref("beacon.enabled", false);
-//Ne pas démarrer automatiquement le navigateur en mode navigation privée automatiquement
-user_pref("browser.privatebrowsing.autostart", false);
-//Désactiver debug à distance
+//DÃ©sactiver debug Ã  distance
 user_pref("devtools.debugger.remote-enabled", false);
 user_pref("devtools.debugger.force-local", true);
-//Protection intégrée à Firefox contre le pistage
+//Protection intÃ©grÃ©e Ã  Firefox contre le pistage
 user_pref("privacy.resistFingerprinting", true);
-//Ne pas gérer le statut de la connexion
+//Ne pas gÃ©rer le statut de la connexion
 user_pref("network.manage-offline-status", false);
-//Ne pas faire de rapport sur les connexions chiffrées avec erreurs
+//Ne pas crÃ©er de rapport sur les connexions chiffrÃ©es avec erreurs
 user_pref("security.ssl.errorReporting.enabled", false);
+user_pref("security.ssl.errorReporting.automatic", false);
 //Ne pas envoyer le rapport de crash quand il y en a
 user_pref("browser.tabs.crashReporting.sendReport", false);
-//Désactiver les rapports d'erreurs SSL
-user_pref("security.ssl.errorReporting.automatic", false);
-user_pref("security.ssl.errorReporting.enabled", false);
-user_pref("security.ssl.errorReporting.url", "");
 //Ne pas utiliser d'identifiant unique pour les connexions SSL (permet normalement de se reconnecter plus vite avec)
 user_pref("security.ssl.disable_session_identifiers", true);
-//Activer les conteneurs pour les infos stockées afin qu'elles ne soient pas partagées entre les onglets
+//Activer les conteneurs pour les infos stockÃ©es afin qu'elles ne soient pas partagÃ©es entre les onglets
 //cf https://wiki.mozilla.org/Security/Contextual_Identity_Project/Containers
 user_pref("privacy.userContext.enabled", true);
-
-/**********
-* Sécurité
-**********/
-//Désactiver safebrowsing
-//user_pref("browser.safebrowsing.enabled", false); //FF49- donc obsolète
-user_pref("browser.safebrowsing.malware.enabled", false);
-user_pref("browser.safebrowsing.phishing.enabled", false); // FF50+
-//Ne pas consulter une base de données externe pour savoir si le site visité est légitime
+//Ne pas consulter une base de donnÃ©es externe pour savoir si le site visitÃ© est lÃ©gitime
 user_pref("browser.safebrowsing.remoteLookups", false);
-//Ne pas contrôler les fichiers téléchargés
+//Ne pas contrÃ´ler les fichiers tÃ©lÃ©chargÃ©s
 user_pref("browser.safebrowsing.downloads.enabled", false);
-//Si l'option ci-dessus est activée, cette option permet de contrôler les fichiers uniquement en local
+//Si l'option ci-dessus est activÃ©e (passÃ© Ã  true), cette option permet de contrÃ´ler les fichiers uniquement en local
 user_pref("browser.safebrowsing.downloads.remote.enabled", false);
-//Supprimer les liens où Firefox récupère les informations pour le safebrowsing
-user_pref("browser.safebrowsing.reportMalwareMistakeURL", "");
-user_pref("browser.safebrowsing.reportPhishMistakeURL", "");
-user_pref("browser.safebrowsing.reportPhishURL", "");
-user_pref("browser.safebrowsing.appRepURL", "");
-user_pref("browser.safebrowsing.provider.google.gethashURL", "");
-user_pref("browser.safebrowsing.provider.google.reportURL", "");
-user_pref("browser.safebrowsing.provider.google.updateURL", "");
-user_pref("browser.safebrowsing.provider.mozilla.gethashURL", "");
-user_pref("browser.safebrowsing.provider.mozilla.updateURL", "");
-//Vérifier l'intégrité d'une page web Firefox 43+
+
+
+/*** SÃ©curitÃ© ***/
+//VÃ©rifier l'intÃ©gritÃ© d'une page web Firefox 43+
 user_pref("security.csp.enable", true);
 user_pref("security.sri.enable", true);
-//Désactiver authentification non sécurisée
+//DÃ©sactiver authentification non sÃ©curisÃ©e
 user_pref("network.negotiate-auth.allow-insecure-ntlm-v1", false);
 //Avertir lorsque le site web utilise un chiffrement faible
 user_pref("security.warn_entering_weak", true);
 //HTTP Strict-Transport-Security (HSTS)
 user_pref("network.stricttransportsecurity.preloadlist", true);
 user_pref("security.mixed_content.use_hsts", true);
-//Désactiver les requêtes HSTS Priming qui peuvent être longue à répondre
+//DÃ©sactiver les requÃªtes HSTS Priming qui peuvent Ãªtre longue Ã  rÃ©pondre
 user_pref("security.mixed_content.send_hsts_priming", false);
 //Activer Online Certificate Status Protocol
 user_pref("security.OCSP.enabled", 1);
 user_pref("security.ssl.enable_ocsp_stapling", true);
-//Vérifier certification auprès de la cert authority (balance entre vie privée et sécurité)
-//Passé à false par défaut dans FF44 à cause de problèmes avec certains sites
+//VÃ©rifier certification auprÃ¨s de la cert authority (balance entre vie privÃ©e et sÃ©curitÃ©)
+//PassÃ© Ã  false par dÃ©faut dans FF44 Ã  cause de problÃ¨mes avec certains sites
 //user_pref("security.OCSP.require", true);
-//Public Key Pinning
-//PKP (public key pinning)
-//0=désactivé 1=autoriser le MiTM de l'utilisateur (par exemple, un antivirus), 2=stricte (ne fonctionne pas pour moi)
-user_pref("security.cert_pinning.enforcement_level", 1);
-//Afficher un message d'avertissement pour les sites avec une sécurité insuffisante
+//Public Key Pinning (PKP) - pour empÃ©cher les attaques Man in The middle (MiTM)
+user_pref("security.cert_pinning.enforcement_level", 1); // 0=dÃ©sactivÃ© ; 1 = autoriser le MiTM de l'utilisateur (par exemple, un antivirus) ; 2 = stricte
+//Afficher un message d'avertissement pour les sites avec une sÃ©curitÃ© insuffisante
 user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
-//Bloquer les connexions non chiffrées vers du contenu actif sur une page chiffrée
+//Bloquer les connexions non chiffrÃ©es (images, scripts, ...) sur une page chiffrÃ©e
 user_pref("security.mixed_content.block_active_content", true);
-//Afficher un rapport sur les pages "Connexion non sécurisée"
+//Afficher un rapport sur les pages "Connexion non sÃ©curisÃ©e"
 user_pref("browser.xul.error_pages.expert_bad_cert", true);
+// Se protÃ©ger contre les attaques de phishing qui utilisent des noms de domaine dans dâ€™autres alphabets
+user_pref("network.IDN_show_punycode", true);
+//Afficher un avertissement concernant les formulaires de connexion sur les pages non sÃ©curisÃ©e
+user_pref("security.insecure_password.ui.enabled", true);
+
 /** Chiffrement **/
-//Désactiver les chiffrements null
+//DÃ©sactiver les chiffrements null
 user_pref("security.ssl3.rsa_null_sha", false);
 user_pref("security.ssl3.rsa_null_md5", false);
 user_pref("security.ssl3.ecdhe_rsa_null_sha", false);
@@ -157,14 +138,14 @@ user_pref("security.ssl3.ecdh_rsa_aes_128_sha", false);
 user_pref("security.ssl3.ecdh_ecdsa_aes_128_sha", false);
 user_pref("security.ssl3.dhe_rsa_camellia_128_sha", false);
 user_pref("security.ssl3.dhe_rsa_aes_128_sha", false);
-//RC4 : Obsolète car désactivé par défaut depuis FF44
-user_pref("security.ssl3.ecdh_ecdsa_rc4_128_sha", false);
-user_pref("security.ssl3.ecdh_rsa_rc4_128_sha", false);
-user_pref("security.ssl3.ecdhe_ecdsa_rc4_128_sha", false);
-user_pref("security.ssl3.ecdhe_rsa_rc4_128_sha", false);
-user_pref("security.ssl3.rsa_rc4_128_md5", false);
-user_pref("security.ssl3.rsa_rc4_128_sha", false);
-user_pref("security.tls.unrestricted_rc4_fallback", false);
+//RC4 : ObsolÃ¨te car dÃ©sactivÃ© par dÃ©faut depuis FF44
+//user_pref("security.ssl3.ecdh_ecdsa_rc4_128_sha", false);
+//user_pref("security.ssl3.ecdh_rsa_rc4_128_sha", false);
+//user_pref("security.ssl3.ecdhe_ecdsa_rc4_128_sha", false);
+//user_pref("security.ssl3.ecdhe_rsa_rc4_128_sha", false);
+//user_pref("security.ssl3.rsa_rc4_128_md5", false);
+//user_pref("security.ssl3.rsa_rc4_128_sha", false);
+//user_pref("security.tls.unrestricted_rc4_fallback", false);
 //3DES
 user_pref("security.ssl3.dhe_dss_des_ede3_sha", false);
 user_pref("security.ssl3.dhe_rsa_des_ede3_sha", false);
@@ -195,57 +176,56 @@ user_pref("security.ssl3.dhe_dss_camellia_128_sha", false);
 user_pref("security.ssl3.dhe_dss_camellia_256_sha", false);
 //TLS
 user_pref("security.enable_tls_session_tickets", false);
-//Devrait être défini à 2 car TLS1 n'est plus sécurisé mais beaucoup de sites ne supportent pas les versions supérieurs
-user_pref("security.tls.version.min", 1);
-//1=TLS 1.0, 2=TLS 1.1, 3=TLS 1.2, 4=TLS 1.3 (FF49+)
-user_pref("security.tls.version.max", 4);
-//Version de TLS par défaut
+//Version minimum de TLS
+user_pref("security.tls.version.min", 1); // Devrait Ãªtre dÃ©fini Ã  2 car TLS1 n'est plus sÃ©curisÃ© mais beaucoup de sites ne supportent pas les versions supÃ©rieurs
+//Version max
+user_pref("security.tls.version.max", 4); // 1 = TLS 1.0 ; 2 = TLS 1.1 ; 3 = TLS 1.2 ; 4 = TLS 1.3 (FF49+)
+//Version par dÃ©faut
 user_pref("security.tls.version.fallback-limit", 3);
-//Désactiver SSLv3
+//DÃ©sactiver SSLv3
 user_pref("security.enable_ssl3", false);
 user_pref("security.ssl3.dhe_rsa_aes_128_sha", false);
 user_pref("security.ssl3.dhe_rsa_aes_256_sha", false);
-//Conservé pour des raisons de compatibilité
+//ConservÃ© pour des raisons de compatibilitÃ©
 user_pref("security.ssl3.rsa_aes_256_sha", true);
 user_pref("security.ssl3.rsa_aes_128_sha", true);
-//Sécurité strict - Ne fonctionne pas encore
+//SÃ©curitÃ© strict - Ne fonctionne pas encore
 //user_pref("security.ssl.require_safe_negotiation", true);
 //Nouveaux chiffrements : ChaCha20 et Poly1305
 user_pref("security.ssl3.ecdhe_ecdsa_chacha20_poly1305_sha256", true);
 user_pref("security.ssl3.ecdhe_rsa_chacha20_poly1305_sha256", true);
 //SHA-1
-//0=autoriser, 1=désactiver, 2=autoriser jusqu'au 01-01-2016
-//Non sécurisé, à désactiver !!!
-user_pref("security.pki.sha1_enforcement_level", 1);
+//Non sÃ©curisÃ©, Ã  dÃ©sactiver !!!
+user_pref("security.pki.sha1_enforcement_level", 1); // 0 = autoriser ; 1 = dÃ©sactiver ; 2 = autoriser jusqu'au 01-01-2016
 
-/**********
-* Extensions et plugins
-**********/
-//Désactiver Flash
+
+/*** Extensions et plugins ***/
+//DÃ©sactiver Flash
 user_pref("plugin.state.flash", 0);
 //Click to play
 user_pref("plugins.click_to_play", true);
-//Mise à jour automatique des addons
+//Mise Ã  jour automatique des addons
 user_pref("extensions.update.enabled", true);
 user_pref("extensions.update.autoUpdateDefault", true);
-//Ne pas mettre à jour les méta-données des extensions
+//Ne pas mettre Ã  jour les mÃ©ta-donnÃ©es des extensions
 user_pref("extensions.getAddons.cache.enabled", false);
-//Ne pas envoyer la liste des extensions installées aux sites web
+//Ne pas envoyer la liste des extensions installÃ©es aux sites web
 user_pref("plugins.enumerable_names", "");
-//Empécher les extensions d'utiliser les scripts XPCOM ou XPConnect
+//EmpÃ©cher les extensions d'utiliser les scripts XPCOM ou XPConnect
 //user_pref("security.xpconnect.plugin.unrestricted", false);
-//Par défaut, les plugins sont désactivés
+//Par dÃ©faut, les plugins sont dÃ©sactivÃ©s
 user_pref("plugin.default.state", 0);
-//Ne pas rechercher de plugin pour les logiciels sur l'ordinateur (ex: Java, Flash, Antivirus, ...)
+//Ne pas prendre en compte les plugins des les logiciels installÃ©s sur l'ordinateur (ex: Java, Flash, Antivirus, ...)
 user_pref("plugin.scan.plid.all", false);
+//Temps d'attente avant installation d'un Add-on (en msec)
+user_pref("security.dialog_enable_delay", 1000);
 
-/**********
-* Vitesse de connexion
-**********/
+
+/*** Vitesse de connexion ***/
 //Pipelining
 user_pref("network.http.pipelining", true);
 user_pref("network.http.proxy.pipelining", true);
-//Nombre de connexions simultanées
+//Nombre de connexions simultanÃ©es
 user_pref("network.http.max-connections", 256);
 user_pref("network.http.pipelining.maxrequests", 8);
 user_pref("network.http.max-connections-per-server", 16);
@@ -255,67 +235,77 @@ user_pref("network.http.max-persistent-connections-per-server", 8);
 user_pref("network.prefetch-next", false);
 user_pref("network.dns.disablePrefetch", true);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
-//Désactiver pré-chargement d'un site dont on survole le lien
+//DÃ©sactiver prÃ©-chargement d'un site dont on survole le lien
 user_pref("network.http.speculative-parallel-limit", 0);
-//SPDY abandonné pour HTTP2
+//SPDY abandonnÃ© pour HTTP2
 user_pref("network.http.spdy.enabled", false);
 user_pref("network.http.spdy.enabled.deps", false);
 //HTTP2
 user_pref("network.http.spdy.enabled.http2", true);
 
-/**********
-* Gestion du cache
-**********/
+
+/*** Gestion du cache ***/
 //Activer mise en cache
 user_pref("browser.cache.memory.enable", true);
-//Nettoyage à la fermeture du navigateur
-user_pref("privacy.sanitize.sanitizeOnShutdown", true);
-user_pref("privacy.clearOnShutdown.cache", true);
-user_pref("privacy.clearOnShutdown.cookies", true);
-user_pref("privacy.clearOnShutdown.downloads", true);
-user_pref("privacy.clearOnShutdown.formdata", true);
-user_pref("privacy.clearOnShutdown.history", true);
-user_pref("privacy.clearOnShutdown.offlineApps", true);
-user_pref("privacy.clearOnShutdown.passwords", false);
-user_pref("privacy.clearOnShutdown.sessions", true);
-user_pref("privacy.clearOnShutdown.siteSettings", false);
-//Stockage local
+//DÃ©sactiver la fonction offline cache
 user_pref("browser.cache.offline.enable", false);
-//Ne pas garder d'historique
-user_pref("places.history.enabled", false);
-//Les cookies expirent à la fermeture du navigateur
-user_pref("network.cookie.lifetimePolicy", 2);
-//Cookies
-// 1 = Ne jamais accepter les cookies tiers
-// 3 = Accepter uniquement ceux depuis les sites visités
-user_pref("network.cookie.cookieBehavior", 1);
-//Empécher la mise en cache de pages web, emails ou autres sur le disque dur
+//EmpÃ©cher la mise en cache de pages web, emails ou autres sur le disque dur
 user_pref("browser.cache.disk.enable", false);
 //Idem pour les pages SSL
 user_pref("browser.cache.disk_cache_ssl", false);
-//Désactiver expérience sur le cache
+//DÃ©sactiver expÃ©riences sur le cache
 user_pref("browser.cache.frecency_experiment", -1);
-//Ne conserver aucune informations concernant les sessions (formulaires, cookies, données POST, ...)
-user_pref("browser.sessionstore.privacy_level", 2);
-user_pref("browser.sessionstore.privacy_level_deferred", 2);
-//Ne pas tenter de restaurer les pages et sessions après un crash du navigateur
-user_pref("browser.sessionstore.resume_from_crash", false);
 
-/**********
-* Gestion des mots de passe
-**********/
-//Permet d'activer l'option pour enregistrer les mots de passe
-user_pref("signon.rememberSignons", false);
 
-/**********
-* Ergonomie et performances
-**********/
-//E10 - multiprocess
-//Il est plus prudent de laisser les valeurs par défaut
-//user_pref("browser.tabs.remote.force-enable", true);
-//Nombre de processus pour E10 (par défaut : 1)
+/****************************** PrÃ©fÃ©rences personnelles ******************************
+* Les prÃ©fÃ©rences dÃ©finies prÃ©cÃ©dement sont utilisÃ©es pour optimiser Firefox en modifiant au
+* minimum son comportement par dÃ©faut.
+* Les prÃ©fÃ©rences suivantes modifient en profondeur le navigateur pour une utilisation personnalisÃ©e.
+* Ã€ modifier pour rÃ©pondre Ã  vos besoins ou Ã  supprimer dans le doute
+**********************************************************************************/
+
+/*** Page d'acceuil ***/
+user_pref("browser.startup.homepage", "about:newtab");
+user_pref("browser.startup.page", 1); // 0 = page vide ; 1 = browser.startup.homepage (ci-dessus) ; 2=restaurer session prÃ©cÃ©dente
+/* Configuration NewTabPage comme page d'acceuil */
+//Activer NewTabPage
+user_pref("browser.newtabpage.enabled", true);
+//Afficher NewTabPage lorsque l'on ouvre un nouvel onglet vide
+user_pref("browser.newtab.url", "");
+user_pref("browser.newtab.preload", false);
+//DÃ©sactiver la pub
+user_pref("browser.newtabpage.enhanced", false);
+//DÃ©sactiver la capture d'Ã©cran pour aperÃ§u dans NewTabPage
+user_pref("browser.pagethumbnails.capturing_disabled", true);
+user_pref("browser.newtabpage.directory.ping", "");
+user_pref("browser.newtabpage.directory.source", "");
+//Tuiles sur la page d'acceuil
+user_pref("browser.newtabpage.rows", 5);
+user_pref("browser.newtabpage.columns", 5);
+user_pref("toolkit.pageThumbs.minHeight", 100);
+user_pref("toolkit.pageThumbs.minWidth", 250);
+
+
+/*** Polices de caractÃ¨res ***/
+//Autoriser les icÃ´nes
+user_pref("gfx.downloadable_fonts.enabled", true);
+//DÃ©sactiver les polices de caractÃ¨res au format SVG
+user_pref("gfx.font_rendering.opentype_svg.enabled", false);
+//Polices de caractÃ¨res par dÃ©faut
+user_pref("font.name.serif.x-unicode", "Georgia");
+user_pref("font.name.serif.x-western", "Georgia"); //par dÃ©faut Times New Roman
+user_pref("font.name.sans-serif.x-unicode", "Arial");
+user_pref("font.name.sans-serif.x-western", "Arial");  //par dÃ©faut Arial
+user_pref("font.name.monospace.x-unicode", "Lucida Console");
+user_pref("font.name.monospace.x-western", "Lucida Console"); //par dÃ©faut Courier New
+
+
+/*** Ergonomie et performances ***/
+//E10 - multiprocess - Nombre de processus (par dÃ©faut : 1)
 //user_pref("dom.ipc.processCount", 4);
-//Supprimer les messages possibles au démarrage
+
+/** DÃ©marrage du navigateur **/
+//Supprimer les messages possibles au dÃ©marrage
 user_pref("browser.slowStartup.notificationDisabled", true);
 user_pref("browser.slowStartup.maxSamples", 0);
 user_pref("browser.slowStartup.samples", 0);
@@ -325,71 +315,127 @@ user_pref("startup.homepage_welcome_url", "");
 user_pref("startup.homepage_override_url", "");
 user_pref("browser.feeds.showFirstRunUI", false);
 user_pref("browser.usedOnWindows10.introURL", "");
-//Ne pas vérifier le navigateur par défaut au démarrage
+//DÃ©sactiver prÃ©sentation de l'interface
+user_pref("browser.uitour.enabled", false);
+//Ne pas vÃ©rifier le navigateur par dÃ©faut au dÃ©marrage
 user_pref("browser.shell.checkDefaultBrowser", false);
 //Ne pas quitter le navigateur si on ferme le dernier onglet
 user_pref("browser.tabs.closeWindowWithLastTab", false);
-//Montrer l'url complète (avec http ou https)
-user_pref("browser.urlbar.trimURLs", false);
-//Ne pas sélectionner les espaces après un mot sur lequel on a double cliqué
+//DÃ©sactiver la vÃ©rification des plugins Ã  chaque redÃ©marrage
+user_pref("plugins.update.notifyUser", false);
+//Ne pas dÃ©marrer automatiquement le navigateur en mode navigation privÃ©e automatiquement
+user_pref("browser.privatebrowsing.autostart", false);
+
+/** Page Web **/
+//Couleur arriÃ¨re-plan par dÃ©faut
+user_pref("browser.display.background_color", "#c1c1c1");
+//Demander la permission avant de rafraichir automatiquement la page
+user_pref("accessibility.blockautorefresh", true);
+//Ne pas sÃ©lectionner les espaces aprÃ¨s un mot sur lequel on a double cliquÃ©
 user_pref("layout.word_select.eat_space_to_next_word", false);
-//Ne pas ouvrir de nouvelles fenêtres (popup ou autres)
-user_pref("dom.disable_window_open_feature.resizable", false);
-//Ouvrir le résultat d'une recherche dans un nouvel onglet
-user_pref("browser.search.openintab", true);
-//Activer la vérification de l'orthographe
+//Activer la vÃ©rification de l'orthographe
 user_pref("layout.spellcheckDefault", 2);
 //La touche retour ne fait rien
 user_pref("browser.backspace_action", 2);
-//Temps d'attente avant installation d'un Add-on (en msec)
-user_pref("security.dialog_enable_delay", 1000);
+//DÃ©sactive le scrolling ralenti
+user_pref("general.smoothScroll", false);
+//RÃ©serve de l'espace sur la page pour les images en cours de chargement
+user_pref("browser.display.show_image_placeholders", false);
+//DÃ©sactivation de la prÃ©diction des actions de l'utilisateur
+user_pref("network.predictor.enabled", false);
+//DÃ©sactiver le message affichÃ© lorsque l'on passe en plein Ã©cran
+user_pref("full-screen-api.warning.timeout", 0);
+
+/** Onglets **/
+//Ouvrir les liens dans un nouvel onglet au lieu d'une nouvelle fenÃªtre
+user_pref("browser.link.open_newwindow", 3); // 1 = fenÃªtre actuelle ; 2 = nouvelle fenÃªtre ; 3=fenÃªtre la plus rÃ©cente
+//Activer la prÃ©-visualisation des onglets avec Ctrl+Tab
+user_pref("browser.ctrlTab.previews", true);
+//Ouvrir les liens dans un onglet Ã  droite de l'onglet courant au lieu de Ã  la suite des onglets dÃ©jÃ  ouverts
+user_pref("browser.tabs.insertRelatedAfterCurrent", true);
+//Ã€ la fermeture d'un onglet, revenir Ã  l'onglet parent s'il existe
+user_pref("browser.tabs.selectOwnerOnClose", true);
+//Lors de l'ouverture d'un lien dans un nouvel onglet
+user_pref("browser.tabs.loadInBackground", true); //true = ne pas passer automatiquement sur celui-ci ; false = passer automatiquement sur celui-ci
+//Idem mais pour les liens qui devaient ouvrir une nouvelle fenÃªtre
+user_pref("browser.tabs.loadDivertedInBackground", false); //true = ne pas passer sur le nouvel onglet ; false = passer sur le nouvel onglet
+//Ne pas ouvrir de nouvelles fenÃªtres (popup ou autres)
+user_pref("dom.disable_window_open_feature.resizable", false);
+//Ouvrir le rÃ©sultat d'une recherche dans un nouvel onglet
+user_pref("browser.search.openintab", true);
+//DÃ©sactiver l'animation des onglets
+user_pref("browser.tabs.animate", false);
+
+/** Barre d'URL et de recherche **/
+//Ne pas faire de recherche sur ce qui est tapÃ© dans la barre d'adresse si ce n'est pas une URL valide
+user_pref("keyword.enabled", false);
+//Montrer l'url complÃ¨te (avec http ou https)
+user_pref("browser.urlbar.trimURLs", false);
 //Suggestion de recherche
 user_pref("browser.search.suggest.enabled", false);
-//Désactiver SSDP (Send Video To Device)
-user_pref("browser.casting.enabled", false);
-//Mozilla snippets
-user_pref("browser.aboutHomeSnippets.updateUrl", "");
-//Désactiver la vérification des plugins à chaque redémarrage
-user_pref("plugins.update.notifyUser", false);
-//Désactive le scrolling ralenti
-user_pref("general.smoothScroll", false);
-//Réserve de l'espace sur la page pour les images en cours de chargement
-user_pref("browser.display.show_image_placeholders", false);
-//Désactiver l'animation des onglets
-user_pref("browser.tabs.animate", false);
-//Ne pas compléter automatiquement l'adresse en ajoutant un préfixe (www.) et un suffixe (.com)
+//Ne pas complÃ©ter automatiquement l'adresse en ajoutant un prÃ©fixe (www.) et un suffixe (.com)
 //Ex: "http://foo" -> "http://(prefix)foo(suffix)"
 user_pref("browser.fixup.alternate.enabled", false);
-//Désactivation de la prédiction des actions de l'utilisateur
-user_pref("network.predictor.enabled", false);
-//Empécher les sites web de modifier l'action du clic droit
-//user_pref("dom.event.contextmenu.enabled", false);
-//Nombre maximum de popups sans action de l'utilisateur (20 par défaut)
-user_pref("dom.popup_maximum", 3);
-//Toujours demander dans quel répertoire doit être télécharger un fichier
-//user_pref("browser.download.useDownloadDir", false);
-//Supprimer les fichiers temporaires à la fermeture du navigateur
+
+/** Fermeture du navigateur **/
+//Nettoyage des donnÃ©es stockÃ©es
+user_pref("privacy.sanitize.sanitizeOnShutdown", true);
+user_pref("privacy.clearOnShutdown.cache", true);
+user_pref("privacy.clearOnShutdown.cookies", true);
+user_pref("privacy.clearOnShutdown.downloads", true); // Passer Ã  false si vous utilisez le navigateur pour sauvegarder les mots de passe (dÃ©conseillÃ©)
+user_pref("privacy.clearOnShutdown.formdata", true);
+user_pref("privacy.clearOnShutdown.history", true);
+user_pref("privacy.clearOnShutdown.offlineApps", true);
+user_pref("privacy.clearOnShutdown.passwords", false);
+user_pref("privacy.clearOnShutdown.sessions", true);
+user_pref("privacy.clearOnShutdown.siteSettings", false);
+//Supprimer les fichiers temporaires Ã  la fermeture du navigateur
 user_pref("browser.helperApps.deleteTempFileOnExit", true);
+//Les cookies expirent Ã  la fermeture du navigateur
+user_pref("network.cookie.lifetimePolicy", 2);
 
-/**********
-* NewTabPage
-**********/
-//Activer NewTabPage
-user_pref("browser.newtabpage.enabled", true);
-//Afficher NewTabPage lorsque l'on ouvre un nouvel onglet vide
-user_pref("browser.newtab.url", "");
-user_pref("browser.newtab.preload", false);
-//Désactiver la pub
-user_pref("browser.newtabpage.enhanced", false);
-//Désactiver la capture d'écran pour aperçu dans NewTabPage
-user_pref("browser.pagethumbnails.capturing_disabled", true);
-user_pref("browser.newtabpage.directory.ping", "");
-user_pref("browser.newtabpage.directory.source", "");
 
-/**********
-* Media HTML5
-**********/
-//MSE (Media Source Extensions)
+/*** IntÃ©raction avec l'OS (Windows/Linux/...) ***/
+//Toujours demander dans quel rÃ©pertoire doit Ãªtre tÃ©lÃ©charger un fichier
+//user_pref("browser.download.useDownloadDir", false);
+//Ne pas ajouter les fichiers tÃ©lÃ©chargÃ©s au menu des fichiers rÃ©cents de l'OS
+user_pref("browser.download.manager.addToRecentDocs", false);
+
+
+/*** DÃ©veloppeur Web ***/
+//Si true, permet d'activer les outils dÃ©veloppeur pour le navigateur en plus du contenu web
+user_pref("devtools.chrome.enabled", false);
+
+
+/*** Gestion de la mÃ©moire et des sessions ***/
+//Permet d'activer l'option pour enregistrer les mots de passe
+user_pref("signon.rememberSignons", false);
+//Ne pas faire de backup des marques page
+user_pref("browser.bookmarks.max_backups", 0);
+//Ne pas garder d'historique
+user_pref("places.history.enabled", false);
+//Cookies
+user_pref("network.cookie.cookieBehavior", 1); // 1 = Ne jamais accepter les cookies tiers ; 3 = Accepter uniquement ceux depuis les sites visitÃ©s
+//Ne conserver aucune informations concernant les sessions (formulaires, cookies, donnÃ©es POST, ...)
+user_pref("browser.sessionstore.privacy_level", 2);
+user_pref("browser.sessionstore.privacy_level_deferred", 2);
+//Ne pas tenter de restaurer les pages et sessions aprÃ¨s un crash du navigateur
+user_pref("browser.sessionstore.resume_from_crash", false);
+
+
+/*** SÃ©curitÃ© ***/
+//Nombre maximum de popups qu'un mÃªme lien peut ouvrir en auto (20 par dÃ©faut)
+user_pref("dom.popup_maximum", 3);
+//DÃ©sactiver safebrowsing
+user_pref("browser.safebrowsing.malware.enabled", false);
+user_pref("browser.safebrowsing.phishing.enabled", false); // FF50+
+//Protection contre le pistage - DÃ©sactivÃ© car l'extension uBlock Origin est plus efficace
+user_pref("privacy.trackingprotection.enabled", false);
+user_pref("privacy.trackingprotection.pbmode.enabled", false);
+
+
+/*** Medias ***/
+//MSE (Media Source Extensions) - Streaming / vidÃ©os sur internet
 user_pref("media.mediasource.enabled", true);
 user_pref("media.mediasource.mp4.enabled", true);
 user_pref("media.mediasource.webm.audio.enabled", true);
@@ -397,43 +443,42 @@ user_pref("media.mediasource.webm.enabled", true);
 user_pref("media.mediasource.youtubeonly", false);
 user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
-//user_pref("media.gmp-eme-adobe.enabled", false); // Obsolète
-//Désactiver GMP (Gecko Media Plugins)
+//DÃ©sactiver GMP (Gecko Media Plugins)
 user_pref("media.gmp-provider.enabled", false);
 user_pref("media.gmp.trial-create.enabled", false);
-//Désactiver widevine CDM (Content Decryption Module) => DRM
+//DÃ©sactiver widevine CDM (Content Decryption Module) => DRM
 user_pref("media.gmp-widevinecdm.visible", false);
 user_pref("media.gmp-widevinecdm.enabled", false);
 user_pref("media.gmp-widevinecdm.autoupdate", false);
-//Désactiver EME (Encryption Media Extension) => DRM
+//DÃ©sactiver EME (Encryption Media Extension) => DRM
 user_pref("media.eme.enabled", false);
 user_pref("browser.eme.ui.enabled", false);
 user_pref("media.eme.apiVisible", false);
-//Désactiver OpenH264 Video Codec by Cisco
+//DÃ©sactiver OpenH264 Video Codec by Cisco
 user_pref("media.gmp-gmpopenh264.enabled", false);
 user_pref("media.gmp-gmpopenh264.autoupdate", false);
 user_pref("media.gmp-manager.url", "data:text/plain,");
-//Désactiver WebRTC (Web Real-Time Communication)
+//DÃ©sactiver WebRTC (Web Real-Time Communication)
 user_pref("media.peerconnection.enabled", false);
 user_pref("media.peerconnection.use_document_iceservers", false);
 user_pref("media.peerconnection.video.enabled", false);
 user_pref("media.peerconnection.identity.enabled", false);
 user_pref("media.peerconnection.identity.timeout", 1);
 user_pref("media.peerconnection.turn.disable", true);
-user_pref("media.navigator.video.enabled", false); //WebRTC avec vidéo
-//Corrige un problème de fuite d'adresse ip
-user_pref("media.peerconnection.ice.default_address_only", true); //FF50-
+user_pref("media.navigator.enabled", false);
+user_pref("media.navigator.video.enabled", false); //WebRTC avec vidÃ©o
+//Corrige un problÃ¨me de fuite d'adresse ip
+//user_pref("media.peerconnection.ice.default_address_only", true); //FF50-
 user_pref("media.peerconnection.ice.no_host", true); //FF51+
-//Ne pas lire automatiquement les contenus multimédia
+//Ne pas lire automatiquement les contenus multimÃ©dia
 user_pref("media.autoplay.enabled", true);
-//Désactive la possibilité de regarder des vidéos HTML5 sur d'autres appareils sur le réseau
+//DÃ©sactive la possibilitÃ© de regarder des vidÃ©os HTML5 sur d'autres appareils sur le rÃ©seau
 user_pref("browser.casting.enabled", false);
 
-/**********
-* API intégrées dans Firefox
-**********/
-//Désactivation des API inutiles ou intrusives
-//RAF : commenter chaque ligne
+
+/*** API et extensions intÃ©grÃ©es dans Firefox ***/
+//DÃ©sactivation des API inutiles ou intrusives qui envoient des donnÃ©es aux sites
+//DÃ©sactive donc Ã©galement des fonctionnalitÃ©s proposÃ©es par certains sites utilisant ces API
 user_pref("dom.battery.enabled", false);
 user_pref("dom.telephony.enabled", false);
 user_pref("dom.enable_performance", false);
@@ -448,7 +493,7 @@ user_pref("dom.w3c_touch_events.enabled", 0);
 user_pref("camera.control.face_detection.enabled", false);
 //Reconnaissance vocale
 user_pref("media.webspeech.recognition.enable", false);
-//Partage d'écran
+//Partage d'Ã©cran
 user_pref("media.getusermedia.screensharing.enabled", false);
 //Capture audio
 user_pref("media.getusermedia.audiocapture.enabled", false);
@@ -459,7 +504,7 @@ user_pref("browser.send_pings", false);
 user_pref("browser.send_pings.require_same_host", true);
 //Manette de jeux
 user_pref("dom.gamepad.enabled", false);
-//Outil de réalité virtuelle
+//Outil de rÃ©alitÃ© virtuelle
 user_pref("dom.vr.enabled", false);
 user_pref("dom.vr.oculus.enabled", false);
 user_pref("dom.vr.osvr.enabled", false); // FF49+
@@ -480,94 +525,27 @@ user_pref("social.shareDirectory", "");
 user_pref("social.remote-install.enabled", false);
 user_pref("social.directories", "");
 user_pref("social.share.activationPanelEnabled", false);
-//Donne les informations de connexion de l'utilisateur (e.g. connecté en Wifi)
+//Donne les informations de connexion de l'utilisateur (e.g. connectÃ© en Wifi)
 user_pref("dom.netinfo.enabled", false);
-
-/**********
-* Extensions intégrées dans Firefox
-**********/
+//GÃ©olocalisation
+user_pref("geo.enabled", false);
+user_pref("geo.wifi.logging.enabled", false);
+//DÃ©sactiver SSDP (Send Video To Device)
+user_pref("browser.casting.enabled", false);
+//Mozilla snippets
+user_pref("browser.aboutHomeSnippets.updateUrl", "");
 //Pocket
 user_pref("extensions.pocket.enabled", false);
 //Reader
 user_pref("reader.parse-on-load.enabled", false);
 user_pref("browser.readinglist.enabled", false);
-//Désactiver la fonctionnalité Text to Speech du mode Reader (FF49+)
+//DÃ©sactiver la fonctionnalitÃ© Text to Speech du mode Reader (FF49+)
 user_pref("narrate.enabled", false);
-//Désactiver le lecteur PDF interne à Firefox
+//DÃ©sactiver le lecteur PDF interne Ã  Firefox
 user_pref("pdfjs.disabled", true);
 
-/**********
-* Préférences personnelles
-**********/
-//Page d'acceuil
-user_pref("browser.startup.homepage", "about:newtab");
-//Page d'acceuil (0=vide, 1=browser.startup.homepage, 2=restaurer session précédente)
-user_pref("browser.startup.page", 1);
-//Empécher le navigateur de se mettre à jour automatiquement
-//Mise à jour manuelle : Menu > Aide > À propos de Firefox > Rechercher des mises à jour
-//user_pref("app.update.enabled", false);
-//user_pref("app.update.service.enabled", false);
-//Rechercher et installer mise à jour via la fonction de recherche manuelle
-//user_pref("app.update.auto", true);
-//Paramétrage Firefox en Français
-user_pref("intl.locale.matchOS", false);
-user_pref("general.useragent.locale", "fr");
-user_pref("browser.search.countryCode", "FR");
-user_pref("browser.search.region", "FR");
-user_pref("spellchecker.dictionary", "fr");
-user_pref("intl.accept_languages", "fr, fr-fr, en-US, en");
-/** Polices de caractères **/
-//Empêcher les sites de télécharger leurs propres polices de caractères
-//user_pref("browser.display.use_document_fonts", 0);
-//Autoriser les icônes
-user_pref("gfx.downloadable_fonts.enabled", true);
-//Désactiver les polices de caractères au format SVG
-user_pref("gfx.font_rendering.opentype_svg.enabled", false);
-//Polices de caractères par défaut
-user_pref("font.name.serif.x-unicode", "Georgia");
-user_pref("font.name.serif.x-western", "Georgia"); //par défaut Times New Roman
-user_pref("font.name.sans-serif.x-unicode", "Arial");
-user_pref("font.name.sans-serif.x-western", "Arial");  //par défaut Arial
-user_pref("font.name.monospace.x-unicode", "Lucida Console");
-user_pref("font.name.monospace.x-western", "Lucida Console"); //par défaut Courier New
-//Couleur arrière-plan par défaut
-user_pref("browser.display.background_color", "#c1c1c1");
-//Demander la permission au lieu de rafraichir automatiquement la page
-user_pref("accessibility.blockautorefresh", true);
-//Ne pas faire de recherche sur ce qui est tapé dans la barre d'adresse si ce n'est pas une URL valide
-user_pref("keyword.enabled", false);
-//Si true, permet d'activer les outils développeur pour le navigateur en plus du contenu web
-user_pref("devtools.chrome.enabled", false);
-//Désactiver présentation de l'interface
-user_pref("browser.uitour.enabled", false);
-//Ne pas ajouter les fichiers téléchargés au menu Windows des fichiers récents
-user_pref("browser.download.manager.addToRecentDocs", false);
-//Désactiver le message affiché lorsque l'on passe en plein écran
-user_pref("full-screen-api.warning.timeout", 0);
-//Newtab page
-user_pref("browser.newtabpage.rows", 5);
-user_pref("browser.newtabpage.columns", 5);
-user_pref("toolkit.pageThumbs.minHeight", 100);
-user_pref("toolkit.pageThumbs.minWidth", 250);
-/** Onglets **/
-//Ouvrir les liens dans un nouvel onglet au lieu d'une nouvelle fenêtre
-//1=fenêtre actuelle, 2=nouvelle fenêtre, 3=fenêtre la plus récente
-user_pref("browser.link.open_newwindow", 3);
-//Activer la pré-visualisation des onglets avec Ctrl+Tab
-user_pref("browser.ctrlTab.previews", true);
-//Ouvrir les liens dans un onglet à droite de l'onglet courant au lieu de à la suite des onglets déjà ouverts
-user_pref("browser.tabs.insertRelatedAfterCurrent", true);
-//À la fermeture d'un onglet, revenir à l'onglet parent s'il existe
-user_pref("browser.tabs.selectOwnerOnClose", true);
-//Lors de l'ouverture d'un lien dans un nouvel onglet, 
-//true = ne pas passer automatiquement sur celui-ci ; false = passer automatiquement sur celui-ci
-user_pref("browser.tabs.loadInBackground", true);
-//Idem mais pour les liens qui devaient ouvrir une nouvelle fenêtre
-//true = ne pas passer sur le nouvel onglet ; false = passer sur le nouvel onglet
-user_pref("browser.tabs.loadDivertedInBackground", false);
-//Afficher un avertissement concernant les formulaires de connexion sur les pages non sécurisée
-user_pref("security.insecure_password.ui.enabled", true);
 
-/*** Pour vérifier que tout a bien été chargé, rechercher la préférence suivante dans about:config ***/
+
+/*** Pour vÃ©rifier que tout a bien Ã©tÃ© chargÃ©. Rechercher la prÃ©fÃ©rence suivante dans about:config ***/
 user_pref("user.pref.check", "Chargement OK");
 
