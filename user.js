@@ -1,6 +1,6 @@
 /******************************
 * user.js - Vyral - 13/04/2015
-* Dernière modification : 11/07/2017
+* Dernière modification : 10/08/2017
 * Source : http://kb.mozillazine.org/User.js_file
 * A placer dans le répertoire profile de firefox : %APPDATA%\Mozilla\Firefox\Profiles\
 * Faire un back-up du fichier prefs.js avant de copier user.js dans le répertoire profile
@@ -45,17 +45,18 @@ user_pref("network.http.referer.userControlPolicy", 2); // 0 = ne pas envoyer ; 
 user_pref("toolkit.telemetry.enabled", false);
 user_pref("toolkit.telemetry.unified", false);
 user_pref("toolkit.telemetry.cachedClientID", "");
-user_pref("experiments.supported", false);
-user_pref("experiments.enabled", false);
-user_pref("experiments.activeExperiment", false);
-user_pref("network.allow-experiments", false);
-user_pref("datareporting.healthreport.service.enabled", false);
-user_pref("datareporting.healthreport.uploadEnabled", false);
-user_pref("datareporting.policy.dataSubmissionEnabled", false);
+user_pref("toolkit.telemetry.newProfilePing.enabled", false); //FF55+
+user_pref("toolkit.telemetry.shutdownPingSender.enabled", false); //FF55+
 //Ne pas sauvegarder les résultat de télémétrie en local
 user_pref("toolkit.telemetry.archive.enabled", false);
-//Désactiver Heartbeat (télémétrie Firefox)
-user_pref("browser.selfsupport.url", "");
+//Rapports sur les fonctionnalités supplémentaires de Firefox
+user_pref("experiments.enabled", false);
+user_pref("experiments.supported", false);
+user_pref("experiments.activeExperiment", false);
+user_pref("network.allow-experiments", false);
+//Rapports de santé de Firefox
+user_pref("datareporting.healthreport.uploadEnabled", false);
+user_pref("datareporting.policy.dataSubmissionEnabled", false);
 //Ne pas envoyer de données au site lorsque l'on quitte une page
 user_pref("beacon.enabled", false);
 //Désactiver debug à distance
@@ -70,22 +71,26 @@ user_pref("security.ssl.errorReporting.enabled", false);
 user_pref("security.ssl.errorReporting.automatic", false);
 //Ne pas envoyer le rapport de crash quand il y en a
 user_pref("browser.tabs.crashReporting.sendReport", false);
+user_pref("browser.crashReports.unsubmittedCheck.enabled", false); //FF51+
+user_pref("browser.crashReports.unsubmittedCheck.autoSubmit", false); //FF51+
 //Ne pas utiliser d'identifiant unique pour les connexions SSL (permet normalement de se reconnecter plus vite avec)
 user_pref("security.ssl.disable_session_identifiers", true);
 //Activer les conteneurs pour les infos stockées afin qu'elles ne soient pas partagées entre les onglets
 //cf https://wiki.mozilla.org/Security/Contextual_Identity_Project/Containers
 user_pref("privacy.userContext.enabled", true);
-//Ne pas consulter une base de données externe pour savoir si le site visité est légitime
-user_pref("browser.safebrowsing.remoteLookups", false);
-//Ne pas contrôler les fichiers téléchargés
-user_pref("browser.safebrowsing.downloads.enabled", false);
-//Si l'option ci-dessus est activée (passé à true), cette option permet de contrôler les fichiers uniquement en local
-user_pref("browser.safebrowsing.downloads.remote.enabled", false);
+//Protection contre le pistage
+user_pref("privacy.trackingprotection.enabled", true);
+user_pref("privacy.trackingprotection.pbmode.enabled", true);
+//Permettre le paramétrage dans les options
+user_pref("privacy.trackingprotection.ui.enabled", true);
+//Protection basique (pour la protection stricte : "test-track-simple,base-track-digest256,content-track-digest256")
+user_pref("urlclassifier.trackingTable", "test-track-simple,base-track-digest256"); // basic
 
 
 /*** Sécurité ***/
 //Vérifier l'intégrité d'une page web Firefox 43+
 user_pref("security.csp.enable", true);
+user_pref("security.csp.experimentalEnabled", true);
 user_pref("security.sri.enable", true);
 //Désactiver authentification non sécurisée
 user_pref("network.negotiate-auth.allow-insecure-ntlm-v1", false);
@@ -97,7 +102,7 @@ user_pref("security.mixed_content.use_hsts", true);
 //Désactiver les requêtes HSTS Priming qui peuvent être longue à répondre
 user_pref("security.mixed_content.send_hsts_priming", false);
 //Activer Online Certificate Status Protocol
-user_pref("security.OCSP.enabled", 1);
+user_pref("security.OCSP.enabled", 1); // 0=désactivé ; 1=valider les certificat avec une URL pour le service OCSP ; 2=toujours valider
 user_pref("security.ssl.enable_ocsp_stapling", true);
 //Vérifier certification auprès de la cert authority (balance entre vie privée et sécurité)
 //Passé à false par défaut dans FF44 à cause de problèmes avec certains sites
@@ -110,10 +115,15 @@ user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
 user_pref("security.mixed_content.block_active_content", true);
 //Afficher un rapport sur les pages "Connexion non sécurisée"
 user_pref("browser.xul.error_pages.expert_bad_cert", true);
-// Se protéger contre les attaques de phishing qui utilisent des noms de domaine dans d’autres alphabets
+//Se protéger contre les attaques de phishing qui utilisent des noms de domaine dans d’autres alphabets
 user_pref("network.IDN_show_punycode", true);
 //Afficher un avertissement concernant les formulaires de connexion sur les pages non sécurisée
 user_pref("security.insecure_password.ui.enabled", true);
+//Activer la blocklist de Mozilla concernant les certificats
+user_pref("extensions.blocklist.enabled", true);
+user_pref("extensions.blocklist.url", "https://blocklists.settings.services.mozilla.com/v1/blocklist/3/%APP_ID%/%APP_VERSION%/");
+user_pref("services.blocklist.update_enabled", true);
+user_pref("services.blocklist.signing.enforced", true);
 
 /** Chiffrement **/
 //Désactiver les chiffrements null
@@ -199,29 +209,9 @@ user_pref("security.ssl3.ecdhe_rsa_chacha20_poly1305_sha256", true);
 user_pref("security.pki.sha1_enforcement_level", 1); // 0 = autoriser ; 1 = désactiver ; 2 = autoriser jusqu'au 01-01-2016
 
 
-/*** Extensions et plugins ***/
-//Désactiver Flash
-user_pref("plugin.state.flash", 0);
-//Click to play
-user_pref("plugins.click_to_play", true);
-//Mise à jour automatique des addons
-user_pref("extensions.update.enabled", true);
-user_pref("extensions.update.autoUpdateDefault", true);
-//Ne pas mettre à jour les méta-données des extensions
-user_pref("extensions.getAddons.cache.enabled", false);
-//Ne pas envoyer la liste des extensions installées aux sites web
-user_pref("plugins.enumerable_names", "");
-//Empécher les extensions d'utiliser les scripts XPCOM ou XPConnect
-//user_pref("security.xpconnect.plugin.unrestricted", false);
-//Par défaut, les plugins sont désactivés
-user_pref("plugin.default.state", 0);
-//Ne pas prendre en compte les plugins des les logiciels installés sur l'ordinateur (ex: Java, Flash, Antivirus, ...)
-user_pref("plugin.scan.plid.all", false);
-//Temps d'attente avant installation d'un Add-on (en msec)
-user_pref("security.dialog_enable_delay", 1000);
-
-
-/*** Vitesse de connexion ***/
+/*** Performances ***/
+//Activer SERVO, le nouveau moteur de rendu de Mozilla le nouveau moteur de rendu de Mozilla
+user_pref("layout.css.servo.enabled", true);
 //Pipelining
 user_pref("network.http.pipelining", true);
 user_pref("network.http.proxy.pipelining", true);
@@ -235,13 +225,16 @@ user_pref("network.http.max-persistent-connections-per-server", 8);
 user_pref("network.prefetch-next", false);
 user_pref("network.dns.disablePrefetch", true);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
+//Désactivation de la prédiction des actions de l'utilisateur
+user_pref("network.predictor.enabled", false);
+user_pref("network.predictor.enable-prefetch", false); //FF48+
+user_pref("network.captive-portal-service.enabled", false); //FF52+
 //Désactiver pré-chargement d'un site dont on survole le lien
 user_pref("network.http.speculative-parallel-limit", 0);
-//SPDY abandonné pour HTTP2
+//Désactiver SPDY et HTTP2 abandonnés
 user_pref("network.http.spdy.enabled", false);
 user_pref("network.http.spdy.enabled.deps", false);
-//HTTP2
-user_pref("network.http.spdy.enabled.http2", true);
+user_pref("network.http.spdy.enabled.http2", false);
 
 
 /*** Gestion du cache ***/
@@ -251,6 +244,8 @@ user_pref("browser.cache.memory.enable", true);
 user_pref("browser.cache.offline.enable", false);
 //Empécher la mise en cache de pages web, emails ou autres sur le disque dur
 user_pref("browser.cache.disk.enable", false);
+user_pref("browser.cache.disk.smart_size.enabled", false);
+user_pref("browser.cache.disk.smart_size.first_run", false);
 //Idem pour les pages SSL
 user_pref("browser.cache.disk_cache_ssl", false);
 //Désactiver expériences sur le cache
@@ -271,14 +266,11 @@ user_pref("browser.startup.page", 1); // 0 = page vide ; 1 = browser.startup.hom
 //Activer NewTabPage
 user_pref("browser.newtabpage.enabled", true);
 //Afficher NewTabPage lorsque l'on ouvre un nouvel onglet vide
-user_pref("browser.newtab.url", "");
 user_pref("browser.newtab.preload", false);
 //Désactiver la pub
 user_pref("browser.newtabpage.enhanced", false);
 //Désactiver la capture d'écran pour aperçu dans NewTabPage
-user_pref("browser.pagethumbnails.capturing_disabled", true);
-user_pref("browser.newtabpage.directory.ping", "");
-user_pref("browser.newtabpage.directory.source", "");
+user_pref("browser.newtabpage.directory.source", "data:text/plain,");
 //Tuiles sur la page d'acceuil
 user_pref("browser.newtabpage.rows", 5);
 user_pref("browser.newtabpage.columns", 5);
@@ -301,8 +293,10 @@ user_pref("font.name.monospace.x-western", "Lucida Console"); //par défaut Cour
 
 
 /*** Ergonomie et performances ***/
-//E10 - multiprocess - Nombre de processus (par défaut : 1)
-//user_pref("dom.ipc.processCount", 4);
+//Désactiver toutes les animations dans l'interface du navigateur
+//user_pref("toolkit.cosmeticAnimations.enabled", false);
+//Ne pas créer d'aperçus/de vignette de sites visités
+user_pref("browser.pagethumbnails.capturing_disabled", true);
 
 /** Démarrage du navigateur **/
 //Supprimer les messages possibles au démarrage
@@ -312,18 +306,18 @@ user_pref("browser.slowStartup.samples", 0);
 user_pref("browser.rights.3.shown", true);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("startup.homepage_welcome_url", "");
+user_pref("startup.homepage_welcome_url.additional", "");
 user_pref("startup.homepage_override_url", "");
 user_pref("browser.feeds.showFirstRunUI", false);
-user_pref("browser.usedOnWindows10.introURL", "");
+user_pref("browser.laterrun.enabled", false);
 //Désactiver présentation de l'interface
 user_pref("browser.uitour.enabled", false);
+user_pref("browser.onboarding.enabled", false); //FF55+
 //Ne pas vérifier le navigateur par défaut au démarrage
 user_pref("browser.shell.checkDefaultBrowser", false);
 //Ne pas quitter le navigateur si on ferme le dernier onglet
 user_pref("browser.tabs.closeWindowWithLastTab", false);
-//Désactiver la vérification des plugins à chaque redémarrage
-user_pref("plugins.update.notifyUser", false);
-//Ne pas démarrer automatiquement le navigateur en mode navigation privée automatiquement
+//Ne pas démarrer le navigateur en mode navigation privée automatiquement
 user_pref("browser.privatebrowsing.autostart", false);
 
 /** Page Web **/
@@ -334,17 +328,17 @@ user_pref("accessibility.blockautorefresh", true);
 //Ne pas sélectionner les espaces après un mot sur lequel on a double cliqué
 user_pref("layout.word_select.eat_space_to_next_word", false);
 //Activer la vérification de l'orthographe
-user_pref("layout.spellcheckDefault", 2);
+user_pref("layout.spellcheckDefault", 2); //0 = rien ; 1 = multi-lignes ; 2 = multi-lignes et ligne unique
 //La touche retour ne fait rien
 user_pref("browser.backspace_action", 2);
 //Désactive le scrolling ralenti
 user_pref("general.smoothScroll", false);
 //Réserve de l'espace sur la page pour les images en cours de chargement
 user_pref("browser.display.show_image_placeholders", false);
-//Désactivation de la prédiction des actions de l'utilisateur
-user_pref("network.predictor.enabled", false);
 //Désactiver le message affiché lorsque l'on passe en plein écran
 user_pref("full-screen-api.warning.timeout", 0);
+//Ne pas demander de confirmation avant de quitter la page
+user_pref("dom.disable_beforeunload", true);
 
 /** Onglets **/
 //Ouvrir les liens dans un nouvel onglet au lieu d'une nouvelle fenêtre
@@ -363,8 +357,6 @@ user_pref("browser.tabs.loadDivertedInBackground", false); //true = ne pas passe
 user_pref("dom.disable_window_open_feature.resizable", false);
 //Ouvrir le résultat d'une recherche dans un nouvel onglet
 user_pref("browser.search.openintab", true);
-//Désactiver l'animation des onglets
-user_pref("browser.tabs.animate", false);
 
 /** Barre d'URL et de recherche **/
 //Ne pas faire de recherche sur ce qui est tapé dans la barre d'adresse si ce n'est pas une URL valide
@@ -382,17 +374,18 @@ user_pref("browser.fixup.alternate.enabled", false);
 user_pref("privacy.sanitize.sanitizeOnShutdown", true);
 user_pref("privacy.clearOnShutdown.cache", true);
 user_pref("privacy.clearOnShutdown.cookies", true);
-user_pref("privacy.clearOnShutdown.downloads", true); // Passer à false si vous utilisez le navigateur pour sauvegarder les mots de passe (déconseillé)
+user_pref("privacy.clearOnShutdown.downloads", true); //Passer à false si vous utilisez le navigateur pour sauvegarder les mots de passe
 user_pref("privacy.clearOnShutdown.formdata", true);
 user_pref("privacy.clearOnShutdown.history", true);
 user_pref("privacy.clearOnShutdown.offlineApps", true);
-user_pref("privacy.clearOnShutdown.passwords", false);
 user_pref("privacy.clearOnShutdown.sessions", true);
 user_pref("privacy.clearOnShutdown.siteSettings", false);
+//Interval à nettoyer
+user_pref("privacy.sanitize.timeSpan", 0); // 0 = tout supprimer ; 1 = 1h ; 2 = 2h ; 3 = 4h ; 5 = 24h
 //Supprimer les fichiers temporaires à la fermeture du navigateur
 user_pref("browser.helperApps.deleteTempFileOnExit", true);
-//Les cookies expirent à la fermeture du navigateur
-user_pref("network.cookie.lifetimePolicy", 2);
+//Expiration des cookies 
+user_pref("network.cookie.lifetimePolicy", 2); //0 = date définie dans le cookie (défaut) ; 2 = À la fermeture du navigateur ; 3 = durée paramétrée du navigateur
 
 
 /*** Intéraction avec l'OS (Windows/Linux/...) ***/
@@ -403,22 +396,23 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 
 
 /*** Développeur Web ***/
-//Si true, permet d'activer les outils développeur pour le navigateur en plus du contenu web
-user_pref("devtools.chrome.enabled", false);
+//Permet d'activer les outils développeur pour le navigateur en plus du contenu web
+user_pref("devtools.chrome.enabled", true);
 
 
 /*** Gestion de la mémoire et des sessions ***/
-//Permet d'activer l'option pour enregistrer les mots de passe
+//Désactiver l'enregistrement de mots de passe dans le navigateur
 user_pref("signon.rememberSignons", false);
 //Ne pas faire de backup des marques page
 user_pref("browser.bookmarks.max_backups", 0);
 //Ne pas garder d'historique
 user_pref("places.history.enabled", false);
+//Historique par onglet (50 par défaut)
+user_pref("browser.sessionhistory.max_entries", 10);
 //Cookies
-user_pref("network.cookie.cookieBehavior", 1); // 1 = Ne jamais accepter les cookies tiers ; 3 = Accepter uniquement ceux depuis les sites visités
+user_pref("network.cookie.cookieBehavior", 1); // 0 = Tout accepter ; 1 = Ne jamais accepter les cookies tiers ; 2 = Rien accepter ; 3 = Accepter uniquement ceux depuis les sites déjà visités
 //Ne conserver aucune informations concernant les sessions (formulaires, cookies, données POST, ...)
-user_pref("browser.sessionstore.privacy_level", 2);
-user_pref("browser.sessionstore.privacy_level_deferred", 2);
+user_pref("browser.sessionstore.privacy_level", 2); // 0 = partout ; 1 = sites non chiffrés ; 2 = nulle part
 //Ne pas tenter de restaurer les pages et sessions après un crash du navigateur
 user_pref("browser.sessionstore.resume_from_crash", false);
 
@@ -426,12 +420,44 @@ user_pref("browser.sessionstore.resume_from_crash", false);
 /*** Sécurité ***/
 //Nombre maximum de popups qu'un même lien peut ouvrir en auto (20 par défaut)
 user_pref("dom.popup_maximum", 3);
-//Désactiver safebrowsing
+//Seuls les clics et double-clics peuvent ouvrir des popups
+user_pref("dom.popup_allowed_events", "click dblclick");
+//Désactiver safebrowsing (pose souvent problème avec des faux positifs)
 user_pref("browser.safebrowsing.malware.enabled", false);
 user_pref("browser.safebrowsing.phishing.enabled", false); // FF50+
-//Protection contre le pistage - Désactivé car l'extension uBlock Origin est plus efficace
-user_pref("privacy.trackingprotection.enabled", false);
-user_pref("privacy.trackingprotection.pbmode.enabled", false);
+//Ne pas contrôler les fichiers téléchargés
+user_pref("browser.safebrowsing.downloads.enabled", false);
+user_pref("browser.safebrowsing.downloads.remote.enabled", false);
+user_pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted", false);
+user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
+user_pref("browser.safebrowsing.downloads.remote.block_dangerous", false); //FF49+
+user_pref("browser.safebrowsing.downloads.remote.block_dangerous_host", false); //FF49+
+//Forcer les sites web à demander la permission de stocker des données en local
+user_pref("offline-apps.allow_by_default", false);
+user_pref("browser.offline-apps.notify", true);
+
+
+/*** Extensions et plugins ***/
+//Par défaut, les plugins sont désactivés
+user_pref("plugin.default.state", 0);
+user_pref("plugin.defaultXpi.state", 0);
+//Click to play
+user_pref("plugins.click_to_play", true);
+//Rechercher automatiquement les mises à jour pour les extensions
+user_pref("extensions.update.enabled", true);
+//Installer automatiquement les mises à jour pour les extensions
+user_pref("extensions.update.autoUpdateDefault", true);
+//Ne pas mettre à jour les méta-données des extensions
+user_pref("extensions.getAddons.cache.enabled", false);
+//Empécher les extensions d'utiliser les scripts externes/non vérifiés XPCOM ou XPConnect
+user_pref("security.xpconnect.plugin.unrestricted", false);
+//Ne pas prendre en compte les plugins des les logiciels installés sur l'ordinateur (ex: Java, Flash, Antivirus, ...)
+user_pref("plugin.scan.plid.all", false);
+//Temps d'attente avant installation d'un Add-on (en msec)
+user_pref("security.dialog_enable_delay", 1000);
+//Suppression de toutes les données des WebExtensions lors de la désinstallation
+user_pref("extensions.webextensions.keepStorageOnUninstall", false);
+user_pref("extensions.webextensions.keepUuidOnUninstall", false);
 
 
 /*** Medias ***/
@@ -443,21 +469,27 @@ user_pref("media.mediasource.webm.enabled", true);
 user_pref("media.mediasource.youtubeonly", false);
 user_pref("media.fragmented-mp4.exposed", true);
 user_pref("media.fragmented-mp4.ffmpeg.enabled", true);
+//Permettre la lecture automatique des contenus multimédia
+user_pref("media.autoplay.enabled", true);
+//Mettre en silencieux les vidéos en dehors de l'onglet actif
+user_pref("media.block-autoplay-until-in-foreground", true);
+//Désactive la possibilité de regarder des vidéos HTML5 sur d'autres appareils sur le réseau
+user_pref("browser.casting.enabled", false);
 //Désactiver GMP (Gecko Media Plugins)
 user_pref("media.gmp-provider.enabled", false);
 user_pref("media.gmp.trial-create.enabled", false);
+user_pref("media.gmp-manager.updateEnabled", false);
 //Désactiver widevine CDM (Content Decryption Module) => DRM
 user_pref("media.gmp-widevinecdm.visible", false);
 user_pref("media.gmp-widevinecdm.enabled", false);
 user_pref("media.gmp-widevinecdm.autoupdate", false);
 //Désactiver EME (Encryption Media Extension) => DRM
+user_pref("media.eme.chromium-api.enabled", false); //FF55+
 user_pref("media.eme.enabled", false);
 user_pref("browser.eme.ui.enabled", false);
-user_pref("media.eme.apiVisible", false);
 //Désactiver OpenH264 Video Codec by Cisco
 user_pref("media.gmp-gmpopenh264.enabled", false);
 user_pref("media.gmp-gmpopenh264.autoupdate", false);
-user_pref("media.gmp-manager.url", "data:text/plain,");
 //Désactiver WebRTC (Web Real-Time Communication)
 user_pref("media.peerconnection.enabled", false);
 user_pref("media.peerconnection.use_document_iceservers", false);
@@ -465,38 +497,44 @@ user_pref("media.peerconnection.video.enabled", false);
 user_pref("media.peerconnection.identity.enabled", false);
 user_pref("media.peerconnection.identity.timeout", 1);
 user_pref("media.peerconnection.turn.disable", true);
+user_pref("media.peerconnection.ice.tcp", false);
 user_pref("media.navigator.enabled", false);
 user_pref("media.navigator.video.enabled", false); //WebRTC avec vidéo
 //Corrige un problème de fuite d'adresse ip
-//user_pref("media.peerconnection.ice.default_address_only", true); //FF50-
 user_pref("media.peerconnection.ice.no_host", true); //FF51+
-//Ne pas lire automatiquement les contenus multimédia
-user_pref("media.autoplay.enabled", true);
-//Désactive la possibilité de regarder des vidéos HTML5 sur d'autres appareils sur le réseau
-user_pref("browser.casting.enabled", false);
+//WebGL
+user_pref("webgl.disabled", true);
+user_pref("pdfjs.enableWebGL", false);
+user_pref("webgl.min_capability_mode", true);
+user_pref("webgl.disable-extensions", true);
+user_pref("webgl.disable-fail-if-major-performance-caveat", true);
+user_pref("webgl.enable-debug-renderer-info", false);
+user_pref("webgl.dxgl.enabled", false); //FF51+ ; WINDOWS uniquement
+user_pref("webgl.enable-webgl2", false); //FF51+
+//Reconnaissance vocale
+user_pref("media.webspeech.recognition.enable", false);
+user_pref("media.webspeech.synth.enabled", false);
+//Désactivation globale des media
+user_pref("media.getusermedia.browser.enabled", false);
+//Partage d'écran
+user_pref("media.getusermedia.screensharing.enabled", false);
+//Capture audio
+user_pref("media.getusermedia.audiocapture.enabled", false);
 
 
 /*** API et extensions intégrées dans Firefox ***/
 //Désactivation des API inutiles ou intrusives qui envoient des données aux sites
 //Désactive donc également des fonctionnalités proposées par certains sites utilisant ces API
-user_pref("dom.battery.enabled", false);
-user_pref("dom.telephony.enabled", false);
 user_pref("dom.enable_performance", false);
-user_pref("dom.netinfo.enabled", false);
 user_pref("dom.webaudio.enabled", false);
-user_pref("dom.enable_user_timing", false);
 user_pref("dom.enable_resource_timing", false);
 user_pref("dom.vibrator.enabled", false);
 user_pref("dom.idle-observers-api.enabled", false);
+user_pref("dom.IntersectionObserver.enabled", false);
+user_pref("media.video_stats.enabled", false);
 user_pref("dom.w3c_touch_events.enabled", 0);
 //Reconnaissance faciale
 user_pref("camera.control.face_detection.enabled", false);
-//Reconnaissance vocale
-user_pref("media.webspeech.recognition.enable", false);
-//Partage d'écran
-user_pref("media.getusermedia.screensharing.enabled", false);
-//Capture audio
-user_pref("media.getusermedia.audiocapture.enabled", false);
 //Sensor API
 user_pref("device.sensors.enabled", false);
 //HTML5 Pings
@@ -509,16 +547,8 @@ user_pref("dom.vr.enabled", false);
 user_pref("dom.vr.oculus.enabled", false);
 user_pref("dom.vr.osvr.enabled", false); // FF49+
 user_pref("dom.vr.openvr.enabled", false); // FF51+
-//WebGL
-user_pref("webgl.disabled", true);
-user_pref("pdfjs.enableWebGL", false);
-user_pref("webgl.min_capability_mode", true);
-user_pref("webgl.disable-extensions", true);
-user_pref("webgl.disable-fail-if-major-performance-caveat", true);
-user_pref("webgl.enable-debug-renderer-info", false);
-user_pref("webgl.dxgl.enabled", false); //FF51+
-user_pref("webgl.enable-webgl2", false); //FF51+
 //Social_API
+user_pref("social.enabled", false);
 user_pref("social.whitelist", "");
 user_pref("social.toast-notifications.enabled", false);
 user_pref("social.shareDirectory", "");
@@ -532,10 +562,18 @@ user_pref("geo.enabled", false);
 user_pref("geo.wifi.logging.enabled", false);
 //Désactiver SSDP (Send Video To Device)
 user_pref("browser.casting.enabled", false);
-//Mozilla snippets
-user_pref("browser.aboutHomeSnippets.updateUrl", "");
+//Désactiver les snippets Mozilla (contenus affichés sur about:home)
+user_pref("browser.aboutHomeSnippets.updateUrl", "https://127.0.0.1");
 //Pocket
 user_pref("extensions.pocket.enabled", false);
+//FlyWeb
+user_pref("dom.flyweb.enabled", false); //FF49+
+//Shield
+user_pref("extensions.shield-recipe-client.enabled", false); //FF53+
+//Activity Stream
+user_pref("browser.newtabpage.activity-stream.enabled", false); //FF54+
+//Web Compatibility Reporter
+user_pref("extensions.webcompat-reporter.enabled", false); //FF56+
 //Reader
 user_pref("reader.parse-on-load.enabled", false);
 user_pref("browser.readinglist.enabled", false);
@@ -543,9 +581,12 @@ user_pref("browser.readinglist.enabled", false);
 user_pref("narrate.enabled", false);
 //Désactiver le lecteur PDF interne à Firefox
 user_pref("pdfjs.disabled", true);
+//Capture d'écran
+user_pref("dom.imagecapture.enabled", false);
+//Capture vidéo
+user_pref("canvas.capturestream.enabled", false);
 
 
 
 /*** Pour vérifier que tout a bien été chargé. Rechercher la préférence suivante dans about:config ***/
 user_pref("user.pref.check", "Chargement OK");
-
